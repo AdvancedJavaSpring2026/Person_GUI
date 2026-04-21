@@ -37,6 +37,8 @@ public class GUI extends JFrame implements ActionListener{
         });
 
         setUpMenu();
+        setGUILayout();
+
         setSize(WIDTH, HEIGHT);
         setResizable(false);
         setVisible(true);
@@ -48,6 +50,12 @@ public class GUI extends JFrame implements ActionListener{
 
     }
 
+    private void setGUILayout(){
+
+        
+
+
+    }
 
     private void setUpMenu(){
         JMenuBar bar = new JMenuBar();
