@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
 
 public class GUI extends JFrame implements ActionListener{
 
@@ -19,7 +18,19 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem helpMenu_about;
 
     //Layout components
-    JPanel jPanFullApp, jPanPersonArea;
+    JPanel jPanFullApp, jPanPersonListArea, jPanPersonButtonArea, jPanTextFields, jPanBottomArea, jPanDropdowns, jPanTopArea;
+    GridBagLayout gridBagLayout;
+    GridBagConstraints topPanConstraints, bottomPanConstraints;
+
+    //Components that do things
+    JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton;
+    //JComboBox<Person> personDropdown;
+    JComboBox<String> monthDropdown;
+    JComboBox<Integer> dayDropdown;
+    JComboBox<Integer> yearDropdown;
+
+    //Data (this may wind up being in Victoria's work, and deleted here)
+    String firstName, lastName, studentID, govID;
 
     public GUI(){
         super("Temporary Title");
@@ -52,7 +63,23 @@ public class GUI extends JFrame implements ActionListener{
 
     private void setGUILayout(){
 
-        
+        jPanFullApp = new JPanel();
+
+        jPanPersonListArea = new JPanel();
+        jPanPersonButtonArea = new JPanel();
+        jPanTextFields = new JPanel();
+        jPanDropdowns = new JPanel();
+
+        jPanTopArea = new JPanel();
+        jPanBottomArea = new JPanel();
+
+        topPanConstraints = new GridBagConstraints();
+        bottomPanConstraints = new GridBagConstraints();
+
+
+        jPanFullApp.add(jPanTopArea);
+        jPanFullApp.add(jPanBottomArea);
+        add(jPanFullApp);
 
 
     }
