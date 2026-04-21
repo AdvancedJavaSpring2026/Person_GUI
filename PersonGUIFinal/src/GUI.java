@@ -4,6 +4,9 @@ import javax.swing.*;
 
 public class GUI extends JFrame implements ActionListener{
 
+    //NOTE FROM JAMIE - WE CAN MOVE ANY OR ALL ACTIONLISTENER THINGS OUT OF HERE IF NEEDED
+
+
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 1024;
 
@@ -49,7 +52,7 @@ public class GUI extends JFrame implements ActionListener{
 
         setUpMenu();
         setGUILayout();
-
+        addActionListeners();
         setSize(WIDTH, HEIGHT);
         setResizable(false);
         setVisible(true);
@@ -61,24 +64,64 @@ public class GUI extends JFrame implements ActionListener{
 
     }
 
+    private void addActionListeners(){
+        newPersonButton.addActionListener(this);
+        newPersonButton.addActionListener(this);
+        newPersonButton.addActionListener(this);
+        newPersonButton.addActionListener(this);
+
+    }
     private void setGUILayout(){
 
         jPanFullApp = new JPanel();
 
         jPanPersonListArea = new JPanel();
+
+
         jPanPersonButtonArea = new JPanel();
+        jPanPersonButtonArea.setLayout(new GridLayout(1, 3));
+        newPersonButton = new JButton("New Person");
+        editPersonButton = new JButton("Edit Person");
+        deletePersonButton = new JButton("Delete Person");
+
+        jPanPersonButtonArea.add(newPersonButton);
+        jPanPersonButtonArea.add(newPersonButton);
+        jPanPersonButtonArea.add(newPersonButton);
+
+
         jPanTextFields = new JPanel();
+
+
         jPanDropdowns = new JPanel();
 
         jPanTopArea = new JPanel();
         jPanBottomArea = new JPanel();
 
+        storePersonButton = new JButton("Store Person");
+
+        jPanBottomArea.add(storePersonButton);
+
         topPanConstraints = new GridBagConstraints();
         bottomPanConstraints = new GridBagConstraints();
 
+        topPanConstraints.gridx = 0;
+        topPanConstraints.gridy = 0;
+        topPanConstraints.fill = GridBagConstraints.HORIZONTAL;
+        topPanConstraints.anchor = GridBagConstraints.NORTH;
 
-        jPanFullApp.add(jPanTopArea);
-        jPanFullApp.add(jPanBottomArea);
+        bottomPanConstraints.gridx = 0;
+        bottomPanConstraints.gridy = 0;
+        bottomPanConstraints.fill = GridBagConstraints.HORIZONTAL;
+        bottomPanConstraints.anchor = GridBagConstraints.CENTER;
+
+        jPanTopArea.add(jPanPersonButtonArea);
+
+        jPanFullApp.setLayout(gridBagLayout);
+
+
+
+        jPanFullApp.add(jPanTopArea, topPanConstraints);
+        jPanFullApp.add(jPanBottomArea, bottomPanConstraints);
         add(jPanFullApp);
 
 
