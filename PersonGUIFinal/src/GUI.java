@@ -138,10 +138,10 @@ public class GUI extends JFrame implements ActionListener{
         //Bottom right Panel holding Person fields
         personTextFieldsPanel = new JPanel();
         personTextFieldsPanel.setLayout(new GridLayout(4,1));
-        firstNameField = new JTextField();
-        lastNameField = new JTextField();
-        govIDField = new JTextField();
-        studentIDField = new JTextField();
+        firstNameField = new JTextField(15);
+        lastNameField = new JTextField(15);
+        govIDField = new JTextField(15);
+        studentIDField = new JTextField(15);
 
         personTextFieldsPanel.add(firstNameField);
         personTextFieldsPanel.add(lastNameField);
@@ -158,6 +158,7 @@ public class GUI extends JFrame implements ActionListener{
         dateDropdownsPanel.add(monthDropdown);
         dateDropdownsPanel.add(yearDropdown);
 
+        middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
         middlePanelBottom.add(dateDropdownsPanel);
 
