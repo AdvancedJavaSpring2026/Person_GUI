@@ -21,13 +21,14 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem helpMenu_about;
 
     //Layout components
-    JPanel jPanFullApp, jPanPersonListArea, jPanPersonButtonArea, jPanTextFields, jPanBottomArea, jPanDropdowns, jPanTopArea;
+    JPanel fullScreenPanel, personDropdownPanel, personButtonPanel,
+            personTextFieldsPanel, bottomPanel, dateDropdownsPanel, topPanel, middlePanel, personInfoPanel;
     GridBagLayout gridBagLayout;
     GridBagConstraints topPanConstraints, bottomPanConstraints;
 
     //Components that do things
     JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton;
-    //JComboBox<Person> personDropdown;
+    JComboBox<Person> personDropdown;
     JComboBox<String> monthDropdown;
     JComboBox<Integer> dayDropdown;
     JComboBox<Integer> yearDropdown;
@@ -66,65 +67,99 @@ public class GUI extends JFrame implements ActionListener{
 
     private void addActionListeners(){
         newPersonButton.addActionListener(this);
-        newPersonButton.addActionListener(this);
-        newPersonButton.addActionListener(this);
-        newPersonButton.addActionListener(this);
+        editPersonButton.addActionListener(this);
+        deletePersonButton.addActionListener(this);
+        storePersonButton.addActionListener(this);
+        personDropdown.addActionListener(this);
 
     }
     private void setGUILayout(){
+        setLayout(new GridLayout(1, 1));
+        fullScreenPanel = new JPanel();
 
-        jPanFullApp = new JPanel();
+        //Top left Panel holding Person Dropdown Box
+        personDropdownPanel = new JPanel();
+        personDropdown = new JComboBox<>();
 
-        jPanPersonListArea = new JPanel();
 
-
-        jPanPersonButtonArea = new JPanel();
-        jPanPersonButtonArea.setLayout(new GridLayout(1, 3));
+        //Top right Panel holding Person buttons
+        personButtonPanel = new JPanel();
+        personButtonPanel.setLayout(new GridLayout(1, 3));
         newPersonButton = new JButton("New Person");
         editPersonButton = new JButton("Edit Person");
         deletePersonButton = new JButton("Delete Person");
 
-        jPanPersonButtonArea.add(newPersonButton);
-        jPanPersonButtonArea.add(newPersonButton);
-        jPanPersonButtonArea.add(newPersonButton);
 
 
-        jPanTextFields = new JPanel();
+        //Bottom left Panel holding Person info text ("First Name: ", etc.)
+        personInfoPanel = new JPanel();
 
+        //Bottom right Panel holding Person fields
+        personTextFieldsPanel = new JPanel();
 
-        jPanDropdowns = new JPanel();
+        //Bottom right Panel holding date dropdowns
+        dateDropdownsPanel = new JPanel();
 
-        jPanTopArea = new JPanel();
-        jPanBottomArea = new JPanel();
-
+        //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
 
-        jPanBottomArea.add(storePersonButton);
-
-        topPanConstraints = new GridBagConstraints();
-        bottomPanConstraints = new GridBagConstraints();
-
-        topPanConstraints.gridx = 0;
-        topPanConstraints.gridy = 0;
-        topPanConstraints.fill = GridBagConstraints.HORIZONTAL;
-        topPanConstraints.anchor = GridBagConstraints.NORTH;
-
-        bottomPanConstraints.gridx = 0;
-        bottomPanConstraints.gridy = 0;
-        bottomPanConstraints.fill = GridBagConstraints.HORIZONTAL;
-        bottomPanConstraints.anchor = GridBagConstraints.CENTER;
-
-        jPanTopArea.add(jPanPersonButtonArea);
-
-        jPanFullApp.setLayout(gridBagLayout);
 
 
+        topPanel = new JPanel();
+        middlePanel = new JPanel();
+        bottomPanel = new JPanel();
 
-        jPanFullApp.add(jPanTopArea, topPanConstraints);
-        jPanFullApp.add(jPanBottomArea, bottomPanConstraints);
-        add(jPanFullApp);
+
+        personDropdownPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        personDropdownPanel.add(personDropdown);
+
+        personButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        personButtonPanel.add(newPersonButton);
+        personButtonPanel.add(editPersonButton);
+        personButtonPanel.add(deletePersonButton);
+
+        topPanel.add(personDropdownPanel);
+        topPanel.add(personButtonPanel);
 
 
+
+
+
+
+
+        bottomPanel.add(storePersonButton);
+
+        fullScreenPanel.setLayout(new GridLayout(3, 1));
+        fullScreenPanel.add(topPanel);
+        fullScreenPanel.add(middlePanel);
+        fullScreenPanel.add(bottomPanel);
+        //fullScreenPanel.add(bottomPanel);
+        add(fullScreenPanel);
+
+        //Gridbag layout area
+        //        topPanConstraints = new GridBagConstraints();
+//        bottomPanConstraints = new GridBagConstraints();
+//
+//        topPanConstraints.gridx = 0;
+//        topPanConstraints.gridy = 0;
+//        topPanConstraints.weighty = 100;
+//        topPanConstraints.fill = GridBagConstraints.HORIZONTAL;
+//        topPanConstraints.anchor = GridBagConstraints.NORTH;
+//
+//        bottomPanConstraints.gridx = 0;
+//        bottomPanConstraints.gridy = 200;
+//        bottomPanConstraints.weighty = 100;
+//        bottomPanConstraints.fill = GridBagConstraints.HORIZONTAL;
+//        bottomPanConstraints.anchor = GridBagConstraints.CENTER;
+        //fullScreenPanel.setLayout(gridBagLayout);
+//        fullScreenPanel.add(jPanTopArea, topPanConstraints);
+//        fullScreenPanel.add(jPanBottomArea, bottomPanConstraints);
+//        JPanel testPanel = new JPanel();
+//        String testString = "test";
+//        JLabel testLabel = new JLabel();
+//        testLabel.setText(testString);
+//        testPanel.add(testLabel);
+//        jPanFullApp.add(testPanel);
     }
 
     private void setUpMenu(){
