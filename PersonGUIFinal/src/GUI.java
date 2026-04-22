@@ -21,8 +21,8 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem helpMenu_about;
 
     //Layout components
-    JPanel fullScreenPanel, personDropdownPanel, personButtonPanel,
-            personTextFieldsPanel, bottomPanel, dateDropdownsPanel, topPanel, middlePanel, personInfoPanel;
+    JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, bottomPanel, personDropdownPanel,
+            personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel;
     GridBagLayout gridBagLayout;
     GridBagConstraints topPanConstraints, bottomPanConstraints;
 
@@ -35,6 +35,10 @@ public class GUI extends JFrame implements ActionListener{
 
     //Data (this may wind up being in Victoria's work, and deleted here)
     String firstName, lastName, studentID, govID;
+    String selectedPersonsText = " SELECTED PERSON INFORMATION";
+    JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
+    JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
+    JTextField firstNameField, lastNameField, govIDField, studentIDField;
 
     public GUI(){
         super("Temporary Title");
@@ -76,6 +80,13 @@ public class GUI extends JFrame implements ActionListener{
     private void setGUILayout(){
         setLayout(new GridLayout(1, 1));
         fullScreenPanel = new JPanel();
+        topPanel = new JPanel();
+        middlePanelTop = new JPanel();
+        middlePanelBottom = new JPanel();
+        bottomPanel = new JPanel();
+
+        topPanel.setLayout(new GridLayout(1,2));
+
 
         //Top left Panel holding Person Dropdown Box
         personDropdownPanel = new JPanel();
@@ -89,27 +100,6 @@ public class GUI extends JFrame implements ActionListener{
         editPersonButton = new JButton("Edit Person");
         deletePersonButton = new JButton("Delete Person");
 
-
-
-        //Bottom left Panel holding Person info text ("First Name: ", etc.)
-        personInfoPanel = new JPanel();
-
-        //Bottom right Panel holding Person fields
-        personTextFieldsPanel = new JPanel();
-
-        //Bottom right Panel holding date dropdowns
-        dateDropdownsPanel = new JPanel();
-
-        //Bottom panel for Storing Person
-        storePersonButton = new JButton("Store Person");
-
-
-
-        topPanel = new JPanel();
-        middlePanel = new JPanel();
-        bottomPanel = new JPanel();
-
-
         personDropdownPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         personDropdownPanel.add(personDropdown);
 
@@ -121,17 +111,68 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
+        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        selectedPersonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        selectedPersonPanel.add(selectedPersonLabel);
+
+        middlePanelTop.add(selectedPersonPanel);
+
+
+        middlePanelBottom.setLayout(new GridLayout(1,2));
+
+        //Bottom left Panel holding Person info text ("First Name: ", etc.)
+        personInfoPanel = new JPanel(new GridLayout(5,1));
+        firstNameLabel = new JLabel("First Name: ");
+        lastNameLabel = new JLabel("Last Name: ");
+        govIDLabel = new JLabel("Government ID: ");
+        studentIDLabel = new JLabel("Student ID: ");
+        dobLabel = new JLabel("Date of Birth: ");
+        personInfoPanel.add(firstNameLabel);
+        personInfoPanel.add(lastNameLabel);
+        personInfoPanel.add(govIDLabel);
+        personInfoPanel.add(studentIDLabel);
+        personInfoPanel.add(dobLabel);
+
+
+        //Bottom right Panel holding Person fields
+        personTextFieldsPanel = new JPanel();
+        personTextFieldsPanel.setLayout(new GridLayout(4,1));
+        firstNameField = new JTextField();
+        lastNameField = new JTextField();
+        govIDField = new JTextField();
+        studentIDField = new JTextField();
+
+        personTextFieldsPanel.add(firstNameField);
+        personTextFieldsPanel.add(lastNameField);
+        personTextFieldsPanel.add(govIDField);
+        personTextFieldsPanel.add(studentIDField);
+
+        //Bottom right Panel holding date dropdowns
+        dateDropdownsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        monthDropdown = new JComboBox<>();
+        dayDropdown = new JComboBox<>();
+        yearDropdown = new JComboBox<>();
+
+        dateDropdownsPanel.add(dayDropdown);
+        dateDropdownsPanel.add(monthDropdown);
+        dateDropdownsPanel.add(yearDropdown);
+
+        middlePanelBottom.add(personTextFieldsPanel);
+        middlePanelBottom.add(dateDropdownsPanel);
 
 
 
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-
-
+        //Bottom panel for Storing Person
+        storePersonButton = new JButton("Store Person");
         bottomPanel.add(storePersonButton);
 
-        fullScreenPanel.setLayout(new GridLayout(3, 1));
+        fullScreenPanel.setLayout(new GridLayout(4, 1));
         fullScreenPanel.add(topPanel);
-        fullScreenPanel.add(middlePanel);
+        fullScreenPanel.add(middlePanelTop);
+        fullScreenPanel.add(middlePanelBottom);
         fullScreenPanel.add(bottomPanel);
         //fullScreenPanel.add(bottomPanel);
         add(fullScreenPanel);
