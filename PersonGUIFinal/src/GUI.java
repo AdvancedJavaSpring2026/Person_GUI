@@ -75,6 +75,9 @@ public class GUI extends JFrame implements ActionListener{
         deletePersonButton.addActionListener(this);
         storePersonButton.addActionListener(this);
         personDropdown.addActionListener(this);
+        monthDropdown.addActionListener(this);
+        dayDropdown.addActionListener(this);
+        yearDropdown.addActionListener(this);
 
     }
     private void setGUILayout(){
