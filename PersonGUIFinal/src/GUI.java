@@ -184,11 +184,18 @@ public class GUI extends JFrame implements ActionListener{
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(testStoreButton);
 
-        fullScreenPanel.setLayout(new GridLayout(4, 1));
-        fullScreenPanel.add(topPanel);
-        fullScreenPanel.add(middlePanelTop);
-        fullScreenPanel.add(middlePanelBottom);
-        fullScreenPanel.add(bottomPanel);
+        fullScreenPanel.setLayout(new GridBagLayout());
+        GridBagConstraints constraintsTop = new GridBagConstraints();
+        GridBagConstraints constraintsmidTop = new GridBagConstraints();
+        GridBagConstraints constraintsmidLo = new GridBagConstraints();
+        GridBagConstraints constraintsBottom = new GridBagConstraints();
+
+        constraintsTop.gridheight = 250;
+
+        fullScreenPanel.add(topPanel, constraintsTop);
+        fullScreenPanel.add(middlePanelTop, constraintsmidTop);
+        fullScreenPanel.add(middlePanelBottom, constraintsmidLo);
+        fullScreenPanel.add(bottomPanel, constraintsBottom);
         //fullScreenPanel.add(bottomPanel);
         add(fullScreenPanel);
     }
