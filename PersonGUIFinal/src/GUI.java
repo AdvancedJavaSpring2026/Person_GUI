@@ -49,8 +49,6 @@ public class GUI extends JFrame implements ActionListener{
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
 
 
-
-
     public GUI(){
         super("Temporary Title");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -69,8 +67,9 @@ public class GUI extends JFrame implements ActionListener{
         setUpMenu();
 
         setGUILayout();
-        //addActionListeners();
+        addActionListeners();
         this.pack();
+
         setSize(WIDTH, HEIGHT);
 
         setResizable(false);
@@ -94,8 +93,6 @@ public class GUI extends JFrame implements ActionListener{
         yearDropdown.addActionListener(this);
 
     }
-
-
 
     private void setGUILayout(){
         setLayout(new GridLayout(1, 1));
