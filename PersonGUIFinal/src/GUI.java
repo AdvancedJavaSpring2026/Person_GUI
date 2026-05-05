@@ -10,6 +10,14 @@ public class GUI extends JFrame implements ActionListener{
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 1024;
 
+    //Custom Colors
+    Color colorPurpleDark = new Color(132, 94, 194);
+    Color colorPurpleLight = new Color(214, 93, 177);
+    Color colorRedGentle = new Color(255, 111, 145);
+    Color colorOrangeDark = new Color(255, 150, 113);
+    Color colorOrangeLight = new Color(255, 199, 95);
+    Color colorYellow = new Color(249, 248, 113);
+
     //Menu components
     JMenuItem fileMenu_new;
     JMenuItem fileMenu_open;
@@ -40,24 +48,7 @@ public class GUI extends JFrame implements ActionListener{
     JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
 
-    //GUI debugt temp components
-    JButton testDropdown = new JButton("Dropdown");
-    JButton testControls = new JButton("Controls");
-    JButton testSelected = new JButton("Selected");
-    JButton testPersonInfo1 = new JButton("Person Info 1");
-    JButton testPersonInfo2 = new JButton("Person Info 2");
-    JButton testPersonInfo3 = new JButton("Person Info 3");
-    JButton testPersonInfo4 = new JButton("Person Info 4");
-    JButton testPersonInfo5 = new JButton("Person Info 5");
-    JButton testFields1 = new JButton("Fields 1");
-    JButton testFields2 = new JButton("Fields 2");
-    JButton testFields3 = new JButton("Fields 3");
-    JButton testFields4 = new JButton("Fields 4");
-    JButton testFields5 = new JButton("Fields 5");
-    JButton testDate1 = new JButton("Date");
-    JButton testDate2 = new JButton("Month");
-    JButton testDate3 = new JButton("Year");
-    JButton testStoreButton = new JButton("Store");
+
 
 
     public GUI(){
@@ -76,10 +67,12 @@ public class GUI extends JFrame implements ActionListener{
         });
 
         setUpMenu();
-        setTestLayout();
-        //setGUILayout();
+
+        setGUILayout();
         //addActionListeners();
+        this.pack();
         setSize(WIDTH, HEIGHT);
+
         setResizable(false);
         setVisible(true);
 
@@ -102,131 +95,58 @@ public class GUI extends JFrame implements ActionListener{
 
     }
 
-    private void setTestLayout(){
-//       testDropdown                             testControls
-//                            testSelected
-//       testPersonInfo1                          testFields1
-//        testPersonInfo2                         testFields2
-//       testPersonInfo3                          testFields3
-//       testPersonInfo4                          testFields4
-//       testPersonInfo5                          testFields5
-//
-//                                testDate1 testDate2 testDate3
-//
-//                            testStoreButton
 
-
-        setLayout(new GridLayout(1, 1));
-
-        fullScreenPanel = new JPanel();
-        topPanel = new JPanel();
-        middlePanelTop = new JPanel();
-        middlePanelBottom = new JPanel();
-        bottomPanel = new JPanel();
-        personDropdownPanel = new JPanel();
-        personButtonPanel = new JPanel();
-        newPersonButton = new JButton("New Person");
-        editPersonButton = new JButton("Edit Person");
-        deletePersonButton = new JButton("Delete Person");
-
-
-        //personDropdownPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        personDropdownPanel.setLayout(new BorderLayout());
-        personDropdownPanel.add(testDropdown);
-
-        personButtonPanel.setLayout(new BorderLayout());
-        personButtonPanel.add(newPersonButton, BorderLayout.NORTH);
-        personButtonPanel.add(editPersonButton, BorderLayout.CENTER);
-        personButtonPanel.add(deletePersonButton, BorderLayout.SOUTH);
-
-
-
-        selectedPersonPanel = new JPanel(new BorderLayout());
-        selectedPersonPanel.add(testSelected);
-
-
-        personInfoPanel = new JPanel(new GridLayout(5,1));
-        personInfoPanel.add(testPersonInfo1);
-        personInfoPanel.add(testPersonInfo2);
-        personInfoPanel.add(testPersonInfo3);
-        personInfoPanel.add(testPersonInfo4);
-        personInfoPanel.add(testPersonInfo5);
-
-
-        personTextFieldsPanel = new JPanel();
-        personTextFieldsPanel.setLayout(new GridLayout(4,1));
-        personTextFieldsPanel.add(testFields1);
-        personTextFieldsPanel.add(testFields2);
-        personTextFieldsPanel.add(testFields3);
-        personTextFieldsPanel.add(testFields4);
-
-
-        dateDropdownsPanel = new JPanel(new BorderLayout());
-        dateDropdownsPanel.add(testDate1, BorderLayout.WEST);
-        dateDropdownsPanel.add(testDate2, BorderLayout.CENTER);
-        dateDropdownsPanel.add(testDate3, BorderLayout.EAST);
-
-
-
-        topPanel.setLayout(new GridLayout(1,2));
-        topPanel.add(personDropdownPanel);
-        topPanel.add(personButtonPanel);
-
-        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
-        middlePanelTop.add(selectedPersonPanel);
-
-        middlePanelBottom.setLayout(new GridLayout(1,2));
-        middlePanelBottom.add(personInfoPanel);
-        middlePanelBottom.add(personTextFieldsPanel);
-        middlePanelBottom.add(dateDropdownsPanel);
-
-
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        bottomPanel.add(testStoreButton);
-
-        fullScreenPanel.setLayout(new GridBagLayout());
-        GridBagConstraints constraintsTop = new GridBagConstraints();
-        GridBagConstraints constraintsmidTop = new GridBagConstraints();
-        GridBagConstraints constraintsmidLo = new GridBagConstraints();
-        GridBagConstraints constraintsBottom = new GridBagConstraints();
-
-        constraintsTop.gridheight = 250;
-
-        fullScreenPanel.add(topPanel, constraintsTop);
-        fullScreenPanel.add(middlePanelTop, constraintsmidTop);
-        fullScreenPanel.add(middlePanelBottom, constraintsmidLo);
-        fullScreenPanel.add(bottomPanel, constraintsBottom);
-        //fullScreenPanel.add(bottomPanel);
-        add(fullScreenPanel);
-    }
 
     private void setGUILayout(){
         setLayout(new GridLayout(1, 1));
+
         fullScreenPanel = new JPanel();
         topPanel = new JPanel();
         middlePanelTop = new JPanel();
         middlePanelBottom = new JPanel();
         bottomPanel = new JPanel();
+
+        personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        selectedPersonPanel = new JPanel(new BorderLayout());
+        personInfoPanel = new JPanel(new GridLayout(5,1));
+        personTextFieldsPanel = new JPanel(new GridLayout(4,1));
+        dateDropdownsPanel = new JPanel(new BorderLayout());
+
+        fullScreenPanel.setBackground(colorOrangeLight);
+        topPanel.setBackground(colorRedGentle);
+        middlePanelTop.setBackground(colorOrangeDark);
+        middlePanelBottom.setBackground(colorYellow);
+        bottomPanel.setBackground(colorPurpleDark);
+
+        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
+        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 200));
+        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
+        bottomPanel.setPreferredSize(new Dimension(WIDTH, 200));
+
+        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
+        personButtonPanel.setPreferredSize(new Dimension(100, 100));
+        selectedPersonPanel.setPreferredSize(new Dimension(200, 200));
+        personInfoPanel.setPreferredSize(new Dimension(200, 200));
+        personTextFieldsPanel.setPreferredSize(new Dimension(200, 200));
+        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         topPanel.setLayout(new GridLayout(1,2));
 
 
         //Top left Panel holding Person Dropdown Box
-        personDropdownPanel = new JPanel();
         personDropdown = new JComboBox<>();
 
 
         //Top right Panel holding Person buttons
-        personButtonPanel = new JPanel();
         personButtonPanel.setLayout(new GridLayout(1, 3));
+
         newPersonButton = new JButton("New Person");
         editPersonButton = new JButton("Edit Person");
         deletePersonButton = new JButton("Delete Person");
 
-        personDropdownPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         personDropdownPanel.add(personDropdown);
 
-        personButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         personButtonPanel.add(newPersonButton);
         personButtonPanel.add(editPersonButton);
         personButtonPanel.add(deletePersonButton);
@@ -236,7 +156,6 @@ public class GUI extends JFrame implements ActionListener{
 
         middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        selectedPersonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel.add(selectedPersonLabel);
 
         middlePanelTop.add(selectedPersonPanel);
@@ -245,7 +164,7 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelBottom.setLayout(new GridLayout(1,2));
 
         //Bottom left Panel holding Person info text ("First Name: ", etc.)
-        personInfoPanel = new JPanel(new GridLayout(5,1));
+
         firstNameLabel = new JLabel("First Name: ");
         lastNameLabel = new JLabel("Last Name: ");
         govIDLabel = new JLabel("Government ID: ");
@@ -259,8 +178,8 @@ public class GUI extends JFrame implements ActionListener{
 
 
         //Bottom right Panel holding Person fields
-        personTextFieldsPanel = new JPanel();
-        personTextFieldsPanel.setLayout(new GridLayout(4,1));
+
+
         firstNameField = new JTextField(15);
         lastNameField = new JTextField(15);
         govIDField = new JTextField(15);
@@ -272,7 +191,6 @@ public class GUI extends JFrame implements ActionListener{
         personTextFieldsPanel.add(studentIDField);
 
         //Bottom right Panel holding date dropdowns
-        dateDropdownsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         monthDropdown = new JComboBox<>();
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
@@ -281,50 +199,36 @@ public class GUI extends JFrame implements ActionListener{
         dateDropdownsPanel.add(monthDropdown);
         dateDropdownsPanel.add(yearDropdown);
 
+        //Bottom panel for Storing Person
+        storePersonButton = new JButton("Store Person");
+
+
+
+        topPanel.setLayout(new GridLayout(1,2));
+        topPanel.add(personDropdownPanel);
+        topPanel.add(personButtonPanel);
+
+        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
+        middlePanelTop.add(selectedPersonPanel);
+
+        middlePanelBottom.setLayout(new GridLayout(1,2));
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
         middlePanelBottom.add(dateDropdownsPanel);
 
 
-
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-        //Bottom panel for Storing Person
-        storePersonButton = new JButton("Store Person");
         bottomPanel.add(storePersonButton);
 
-        fullScreenPanel.setLayout(new GridLayout(4, 1));
-        fullScreenPanel.add(topPanel);
-        fullScreenPanel.add(middlePanelTop);
-        fullScreenPanel.add(middlePanelBottom);
-        fullScreenPanel.add(bottomPanel);
-        //fullScreenPanel.add(bottomPanel);
+        fullScreenPanel.setLayout(new BorderLayout());
+
+        fullScreenPanel.add(topPanel, BorderLayout.PAGE_START);
+        fullScreenPanel.add(middlePanelTop, BorderLayout.LINE_START);
+        fullScreenPanel.add(middlePanelBottom, BorderLayout.LINE_END);
+        fullScreenPanel.add(bottomPanel, BorderLayout.PAGE_END);
+
         add(fullScreenPanel);
 
-        //Gridbag layout area
-        //        topPanConstraints = new GridBagConstraints();
-//        bottomPanConstraints = new GridBagConstraints();
-//
-//        topPanConstraints.gridx = 0;
-//        topPanConstraints.gridy = 0;
-//        topPanConstraints.weighty = 100;
-//        topPanConstraints.fill = GridBagConstraints.HORIZONTAL;
-//        topPanConstraints.anchor = GridBagConstraints.NORTH;
-//
-//        bottomPanConstraints.gridx = 0;
-//        bottomPanConstraints.gridy = 200;
-//        bottomPanConstraints.weighty = 100;
-//        bottomPanConstraints.fill = GridBagConstraints.HORIZONTAL;
-//        bottomPanConstraints.anchor = GridBagConstraints.CENTER;
-        //fullScreenPanel.setLayout(gridBagLayout);
-//        fullScreenPanel.add(jPanTopArea, topPanConstraints);
-//        fullScreenPanel.add(jPanBottomArea, bottomPanConstraints);
-//        JPanel testPanel = new JPanel();
-//        String testString = "test";
-//        JLabel testLabel = new JLabel();
-//        testLabel.setText(testString);
-//        testPanel.add(testLabel);
-//        jPanFullApp.add(testPanel);
     }
 
     private void setUpMenu(){
