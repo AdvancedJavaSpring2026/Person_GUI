@@ -98,10 +98,10 @@ public class GUI extends JFrame implements ActionListener{
         setLayout(new GridLayout(1, 1));
 
         fullScreenPanel = new JPanel();
-        topPanel = new JPanel();
-        middlePanelTop = new JPanel();
-        middlePanelBottom = new JPanel();
-        bottomPanel = new JPanel();
+        topPanel = new JPanel(new GridLayout(1,2));
+        middlePanelTop = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        middlePanelBottom = new JPanel(new GridLayout(1,2));
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -116,28 +116,25 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelBottom.setBackground(colorYellow);
         bottomPanel.setBackground(colorPurpleDark);
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
-        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 200));
+        personButtonPanel.setBackground(colorRedGentle);
+        personDropdownPanel.setBackground(colorRedGentle);
+
+        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
+        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
         middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
-        bottomPanel.setPreferredSize(new Dimension(WIDTH, 200));
+        bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
         personDropdownPanel.setPreferredSize(new Dimension(100, 50));
-        personButtonPanel.setPreferredSize(new Dimension(100, 100));
+        personButtonPanel.setPreferredSize(new Dimension(100, 40));
         selectedPersonPanel.setPreferredSize(new Dimension(200, 200));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
         personTextFieldsPanel.setPreferredSize(new Dimension(200, 200));
         dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
-        topPanel.setLayout(new GridLayout(1,2));
-
-
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
 
-
         //Top right Panel holding Person buttons
-        personButtonPanel.setLayout(new GridLayout(1, 3));
-
         newPersonButton = new JButton("New Person");
         editPersonButton = new JButton("Edit Person");
         deletePersonButton = new JButton("Delete Person");
@@ -151,14 +148,8 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
-        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
-
         selectedPersonPanel.add(selectedPersonLabel);
-
         middlePanelTop.add(selectedPersonPanel);
-
-
-        middlePanelBottom.setLayout(new GridLayout(1,2));
 
         //Bottom left Panel holding Person info text ("First Name: ", etc.)
 
@@ -214,7 +205,7 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelBottom.add(dateDropdownsPanel);
 
 
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
         bottomPanel.add(storePersonButton);
 
         fullScreenPanel.setLayout(new BorderLayout());
