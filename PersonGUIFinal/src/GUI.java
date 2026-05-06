@@ -106,8 +106,8 @@ public class GUI extends JFrame implements ActionListener{
         personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel = new JPanel(new BorderLayout());
-        personInfoPanel = new JPanel(new GridLayout(5,1));
-        personTextFieldsPanel = new JPanel(new GridLayout(4,1));
+        personInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));//new GridLayout(5,1)
+        personTextFieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
 
         fullScreenPanel.setBackground(colorOrangeLight);
@@ -126,9 +126,9 @@ public class GUI extends JFrame implements ActionListener{
 
         personDropdownPanel.setPreferredSize(new Dimension(100, 50));
         personButtonPanel.setPreferredSize(new Dimension(100, 40));
-        selectedPersonPanel.setPreferredSize(new Dimension(200, 200));
+        selectedPersonPanel.setPreferredSize(new Dimension(WIDTH, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
-        personTextFieldsPanel.setPreferredSize(new Dimension(200, 200));
+        personTextFieldsPanel.setPreferredSize(new Dimension(50, 50));
         dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         //Top left Panel holding Person Dropdown Box
@@ -148,7 +148,7 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
-        selectedPersonPanel.add(selectedPersonLabel);
+        selectedPersonPanel.add(selectedPersonLabel, BorderLayout.CENTER);
         middlePanelTop.add(selectedPersonPanel);
 
         //Bottom left Panel holding Person info text ("First Name: ", etc.)
@@ -190,16 +190,11 @@ public class GUI extends JFrame implements ActionListener{
         //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
 
-
-
-        topPanel.setLayout(new GridLayout(1,2));
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
-        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
         middlePanelTop.add(selectedPersonPanel);
 
-        middlePanelBottom.setLayout(new GridLayout(1,2));
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
         middlePanelBottom.add(dateDropdownsPanel);
