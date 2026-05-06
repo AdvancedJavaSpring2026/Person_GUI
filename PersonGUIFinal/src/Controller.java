@@ -1,8 +1,13 @@
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 
 public class Controller {
@@ -38,42 +43,65 @@ public class Controller {
             fout.close();
             fileIsDirty = false; // Resets marker for unsaved data
             return true; // Signals that the file was saved correctly
-        } 
-        catch (Exception ex){
+        } catch (Exception ex){
             return false; // Signals that something went wrong with saving the file
         }
     }
     
-    public void loadPeopleFile(){
-        // Prompt the user with a JFileChooser dialog, load the file, and then return the ArrayList of People objects
+    // Loads the file into personList. Returns 0 for successful loading, 1 for cancel
+    // and -1 for an error
+    public int loadPeopleFile(){
+        JFileChooser chooser = new JFileChooser();
+        int returnVal = chooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try{
+                    File file = chooser.getSelectedFile();
+                    FileInputStream fin = new FileInputStream(file.getAbsolutePath());
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    personList = new ArrayList<>();
+                    while (true)
+                    {
+                        try
+                        {
+                            Person person = (Person) oin.readObject();
+                            personList.add(person);
+                        }
+                        catch (EOFException eofEx)
+                        {
+                            break;
+                        }
+                    }
+                } catch (Exception ex) {
+                    return -1;
+                }
+        }
+        
+        return returnVal;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob){
-        //Person p = new Person(firstName, lastName, dob);
-        //personList.add(p);
+        Person p = new Person(firstName, lastName, dob);
+        personList.add(p);
         fileIsDirty = true;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob, String govID){
-        //RegisteredPerson r = new RegisteredPerson(firstName, lastName, dob, govID);
-        //personList.add(r);
+        RegisteredPerson r = new RegisteredPerson(firstName, lastName, dob, govID);
+        personList.add(r);
         fileIsDirty = true;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob,
             String govID, String studentID){
-        //OCCCPerson o = new OCCCPerson(firstName, lastName, dob, govID, studentID);
-        //personList.add(o);
+        OCCCPerson o = new OCCCPerson(new RegisteredPerson(firstName, lastName, dob, govID), studentID);
+        personList.add(o);
         fileIsDirty = true;
     }
+    
+    
     
     public void removePersonFromList(Person person) {
         personList.remove(person);
-        fileIsDirty = true;
-    }
-    
-    public void removePersonFromList(int index){
-        personList.remove(index);
         fileIsDirty = true;
     }
     
