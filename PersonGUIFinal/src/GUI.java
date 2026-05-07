@@ -97,10 +97,17 @@ public class GUI extends JFrame implements ActionListener{
         deletePersonButton.addActionListener(e -> deletePersonFromList());
         storePersonButton.addActionListener(e -> addPersonToList());
         personDropdown.addActionListener(e -> personDropdownAction());
-        monthDropdown.addActionListener(this);
+        monthDropdown.addActionListener(e -> refreshDayComboBox());
         dayDropdown.addActionListener(this);
-        yearDropdown.addActionListener(this);
-
+        yearDropdown.addActionListener(e -> refreshDayComboBox());
+        
+        fileMenu_new.addActionListener(this);
+        fileMenu_open.addActionListener(e -> loadFile());
+        fileMenu_save.addActionListener(e -> saveFile(false));
+        fileMenu_saveAs.addActionListener(e -> saveFile(true));
+        fileMenu_exit.addActionListener(this);
+        helpMenu_help.addActionListener(this);
+        helpMenu_about.addActionListener(this);
     }
 
     private void setGUILayout(){
@@ -246,31 +253,24 @@ public class GUI extends JFrame implements ActionListener{
         fileMenu.setMnemonic(KeyEvent.VK_H);
 
         fileMenu_new = new JMenuItem("New");
-        fileMenu_new.addActionListener(this);
         fileMenu_new.setMnemonic(KeyEvent.VK_N);
 
         fileMenu_open = new JMenuItem("Open...");
-        fileMenu_open.addActionListener(this);
         fileMenu_open.setMnemonic(KeyEvent.VK_O);
 
         fileMenu_save = new JMenuItem("Save");
-        fileMenu_save.addActionListener(this);
         fileMenu_save.setMnemonic(KeyEvent.VK_V);
 
         fileMenu_saveAs = new JMenuItem("Save As...");
-        fileMenu_saveAs.addActionListener(this);
         fileMenu_saveAs.setMnemonic(KeyEvent.VK_A);
 
         fileMenu_exit = new JMenuItem("Exit");
-        fileMenu_exit.addActionListener(this);
         fileMenu_exit.setMnemonic(KeyEvent.VK_X);
 
         helpMenu_help = new JMenuItem("Help");
-        helpMenu_help.addActionListener(this);
         helpMenu_help.setMnemonic(KeyEvent.VK_P);
 
         helpMenu_about = new JMenuItem("About");
-        helpMenu_about.addActionListener(this);
         helpMenu_about.setMnemonic(KeyEvent.VK_B);
 
         fileMenu.add(fileMenu_new);
@@ -299,7 +299,6 @@ public class GUI extends JFrame implements ActionListener{
         monthDropdown.setSelectedIndex(0);
         refreshDayComboBox();
     }
-
     
     private void addPersonToList() { // Takes the information from the current fields, creates a new person object and adds it to the list
         // Checks to make sure that required fields are filled out
@@ -371,6 +370,7 @@ public class GUI extends JFrame implements ActionListener{
             govIDField.setText("");
             studentIDField.setText("");
             yearDropdown.setSelectedIndex(0);
+            monthDropdown.setSelectedIndex(0);
         }
         else {
             if (personDropdown.getSelectedItem().getClass().equals(Person.class)) {
@@ -445,5 +445,32 @@ public class GUI extends JFrame implements ActionListener{
         yearDropdown.setEnabled(false);
     }
 
+    private void saveFile(boolean saveAsNewFile) { // Saves the user's current work
+        int result = 2; // Default value that won't trigger a message
+        
+        if (saveAsNewFile || !controller.currentFileExists())
+            result = controller.saveAsNew();
+        else 
+            result = controller.save();
+        
+        if (result == -1)
+            JOptionPane.showMessageDialog(this, "An error has occurred saving your file. Please try again", "Saving Error", JOptionPane.ERROR_MESSAGE);
+        else if (result == 0)
+            JOptionPane.showMessageDialog(this, "Your file saved successfully!", "File Saved", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    private void loadFile() { // Calls the controller to load a file
+        int result = controller.loadPeopleFile();
+        if (result == 0) {
+            refreshPersonComboBox(); // Loads the new Person list into the dropdown 
+            personDropdown.setSelectedIndex(-1);
+        }
+        else if (result == -1) 
+            JOptionPane.showMessageDialog(this, "An error has occurred loading your file. Please try again", "Loading Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void startNewFile() { // Calls the controller to start a new file
+        int result = controller.startNewFile();
+    }
 
 }

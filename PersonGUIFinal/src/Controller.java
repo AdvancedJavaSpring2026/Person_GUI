@@ -1,3 +1,5 @@
+// Makayla Wood
+// Class to handle the logical operations of the Person GUI program (file management, variable management, date calculations, etc.)
 
 import java.io.EOFException;
 import java.io.File;
@@ -14,43 +16,51 @@ public class Controller {
     
     private boolean fileIsDirty; // Keeps track of whether there is unsaved data
     private ArrayList<Person> personList; // Keeps the list of all the People objects
+    private File currentFile; // Keeps track of the current working file
     
     public Controller(){
         fileIsDirty = false;
         personList = new ArrayList();
     }
     
-    // Returns true if the file gets saved correctly; returns false if the operation was cancelled or threw an exception
-    public boolean saveAsNew(){
-        String fileDirectory;
+    public int saveAsNew(){ // Returns 0 if the file was saved correctly, 1 if the operation was cancelled, and -1 if an exception was thrown by JFileChooser
         JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showSaveDialog(null); // Prompts the user to choose a file directory
         if (returnVal == JFileChooser.APPROVE_OPTION) 
-            fileDirectory = chooser.getSelectedFile().getAbsolutePath(); // gets the directory from the user
+            currentFile = chooser.getSelectedFile(); // gets the directory from the user
         else
-            return false; // Something went wrong or the user cancelled the operation
-        return save(fileDirectory); // Moves on to actually saving the file
+            return returnVal; // Something went wrong or the user cancelled the operation
+        return save(); // Moves on to actually saving the file
     }
     
-    // Returns true if the file is saved correctly; returns false if an exception was thrown
-    public boolean save(String currentFileDirectory){
-        try{
-            FileOutputStream fout = new FileOutputStream(currentFileDirectory);
-            ObjectOutputStream oout = new ObjectOutputStream(fout);
-            for (Object obj : personList)
-                oout.writeObject(obj); // Writes each Person object to the file
-            oout.close();
-            fout.close();
-            fileIsDirty = false; // Resets marker for unsaved data
-            return true; // Signals that the file was saved correctly
-        } catch (Exception ex){
-            return false; // Signals that something went wrong with saving the file
+    public int save(){ // Returns 0 if the file was saved correctly, 1 if the operation was cancelled, and -1 if an exception was thrown
+        if (currentFile != null) { // Checks that there is a current working file to save to
+            try{
+                FileOutputStream fout = new FileOutputStream(currentFile);
+                ObjectOutputStream oout = new ObjectOutputStream(fout);
+                for (Object obj : personList)
+                    oout.writeObject(obj); // Writes each Person object to the file
+                oout.close();
+                fout.close();
+                fileIsDirty = false; // Resets marker for unsaved data
+                return 0; // Signals that the file was saved correctly
+            } catch (Exception ex){
+                return -1; // Signals that something went wrong with saving the file
+            }
         }
+        else
+            return saveAsNew(); // Goes to save as new if no working file exists
     }
     
-    // Loads the file into personList. Returns 0 for successful loading, 1 for cancel
-    // and -1 for an error
-    public int loadPeopleFile(){
+    public int loadPeopleFile(){ // Loads the file into personList. Returns 0 for successful loading, 1 for cancel and -1 for an error
+        if (fileIsDirty) { // Prompts the user to save, not save, or cancel loading a new file if unsaved data exists
+            int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (returnVal == JOptionPane.YES_OPTION)
+                save();
+            else if (returnVal == JOptionPane.CANCEL_OPTION)
+                return 0;
+        }
+        // Gets the file from the user and loads it into the program
         JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -58,12 +68,12 @@ public class Controller {
                     File file = chooser.getSelectedFile();
                     FileInputStream fin = new FileInputStream(file.getAbsolutePath());
                     ObjectInputStream oin = new ObjectInputStream(fin);
-                    personList = new ArrayList<>();
+                    personList = new ArrayList<>(); // Resets the list of Person objects
                     while (true)
                     {
                         try
                         {
-                            Person person = (Person) oin.readObject();
+                            Person person = (Person)oin.readObject();
                             personList.add(person);
                         }
                         catch (EOFException eofEx)
@@ -71,12 +81,18 @@ public class Controller {
                             break;
                         }
                     }
+                    fileIsDirty = false; // Resets unsaved data marker
+                    currentFile = file; // Sets the loaded file as the current working file
                 } catch (Exception ex) {
                     return -1;
                 }
         }
-        
         return returnVal;
+    }
+    
+    public int startNewFile() {
+        // Will prompt the user if there is any unsaved data and reset variables to default/empty states
+        return -1;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob){
@@ -98,8 +114,6 @@ public class Controller {
         fileIsDirty = true;
     }
     
-    
-    
     public void removePersonFromList(Person person) {
         personList.remove(person);
         fileIsDirty = true;
@@ -107,6 +121,10 @@ public class Controller {
     
     public ArrayList getPersonList(){
         return personList;
+    }
+    
+    public boolean currentFileExists() {
+        return currentFile == null;
     }
     
     public static int getNumberOfDaysInMonth(int month, int year){
@@ -139,11 +157,5 @@ public class Controller {
         
         return numDays;
     }
-    
-    public static int getNumberOfDaysInMonth(int month){
-        return getNumberOfDaysInMonth(month, 1900); // Placeholder value if year is not available (Not a leap year)
-    }
-    
-    
     
 }
