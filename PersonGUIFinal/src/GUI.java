@@ -75,6 +75,7 @@ public class GUI extends JFrame implements ActionListener{
 
         setGUILayout();
         setUpDateBoxes();
+        closeInputFields();
         
         addActionListeners();
         this.pack();
@@ -299,13 +300,12 @@ public class GUI extends JFrame implements ActionListener{
         setJMenuBar(bar);
     }
     
-    
     private void setUpDateBoxes() { // Gives the date combo boxes their initial values
-        for (int i = 1900; i < java.time.Year.now().getValue(); i++) // Adds every year from 1900 to now for yearDropdown
+        for (int i = java.time.Year.now().getValue() - 1; i > 1899; i--) // Adds every year from 2025 to 1900 for yearDropdown
             yearDropdown.addItem(i);
         for (String month : MONTHS)
             monthDropdown.addItem(month);
-        yearDropdown.setSelectedIndex(yearDropdown.getItemCount() - 1);
+        yearDropdown.setSelectedIndex(0);
         monthDropdown.setSelectedIndex(0);
         refreshDayComboBox();
     }
@@ -381,6 +381,7 @@ public class GUI extends JFrame implements ActionListener{
             studentIDField.setText("");
             yearDropdown.setSelectedIndex(0);
             monthDropdown.setSelectedIndex(0);
+            editPersonButton.setEnabled(false);
         }
         else {
             if (personDropdown.getSelectedItem().getClass().equals(Person.class)) {
@@ -393,6 +394,7 @@ public class GUI extends JFrame implements ActionListener{
                 yearDropdown.setSelectedItem(dob.getYear());
                 monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
                 dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
             }
             else if (personDropdown.getSelectedItem().getClass().equals(RegisteredPerson.class)) {
                 RegisteredPerson p = (RegisteredPerson)personDropdown.getSelectedItem();
@@ -404,6 +406,7 @@ public class GUI extends JFrame implements ActionListener{
                 yearDropdown.setSelectedItem(dob.getYear());
                 monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
                 dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
             }
             else if (personDropdown.getSelectedItem().getClass().equals(OCCCPerson.class)) {
                 OCCCPerson p = (OCCCPerson)personDropdown.getSelectedItem();
@@ -415,6 +418,7 @@ public class GUI extends JFrame implements ActionListener{
                 yearDropdown.setSelectedItem(dob.getYear());
                 monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
                 dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
             }
         }
     }
@@ -433,6 +437,9 @@ public class GUI extends JFrame implements ActionListener{
             personDropdown.setSelectedIndex(-1);
             selectedPersonLabel.setText("NEW PERSON");
         }
+        else {
+            controller.startEditingPerson((Person)personDropdown.getSelectedItem());
+        }
         
         personDropdown.setEnabled(false);
         firstNameField.setEnabled(true);
@@ -442,6 +449,15 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown.setEnabled(true);
         monthDropdown.setEnabled(true);
         yearDropdown.setEnabled(true);
+        
+        fileMenu_new.setEnabled(false);
+        fileMenu_open.setEnabled(false);
+        fileMenu_save.setEnabled(false);
+        fileMenu_saveAs.setEnabled(false);
+        
+        newPersonButton.setEnabled(false);
+        editPersonButton.setEnabled(false);
+        deletePersonButton.setEnabled(false);
     }
     
     private void closeInputFields() { // Closes all the input fields when Person object creation is finished
@@ -453,6 +469,15 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown.setEnabled(false);
         monthDropdown.setEnabled(false);
         yearDropdown.setEnabled(false);
+        
+        fileMenu_new.setEnabled(true);
+        fileMenu_open.setEnabled(true);
+        fileMenu_save.setEnabled(true);
+        fileMenu_saveAs.setEnabled(true);
+        
+        newPersonButton.setEnabled(true);
+        editPersonButton.setEnabled(true);
+        deletePersonButton.setEnabled(true);
     }
 
     private void saveFile(boolean saveAsNewFile) { // Saves the user's current work
