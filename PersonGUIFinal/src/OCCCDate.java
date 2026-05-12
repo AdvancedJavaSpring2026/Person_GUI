@@ -42,7 +42,7 @@ public class OCCCDate implements Serializable, Comparable<OCCCDate>
                 calendar.get(GregorianCalendar.DAY_OF_MONTH) != day)
             throw new InvalidOCCCDateException();
         
-        this(calendar);
+        //this(calendar);
     }
     
     // This constructor creates a copy from another OCCCDate

@@ -20,6 +20,9 @@ public class GUI extends JFrame implements ActionListener{
     Color colorOrangeLight = new Color(255, 199, 95);
     Color colorYellow = new Color(249, 248, 113);
 
+    //Fonts
+    Font mainFont = new Font("Times New Roman", Font.PLAIN, 14);
+
     //Menu components
     JMenuItem fileMenu_new;
     JMenuItem fileMenu_open;
@@ -31,7 +34,7 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem helpMenu_about;
 
     //Layout components
-    JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, bottomPanel, personDropdownPanel,
+    JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, middlePanelContainer, bottomPanel, personDropdownPanel,
             personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel;
     GridBagLayout gridBagLayout;
     GridBagConstraints topPanConstraints, bottomPanConstraints;
@@ -117,6 +120,7 @@ public class GUI extends JFrame implements ActionListener{
         topPanel = new JPanel(new GridLayout(1,2));
         middlePanelTop = new JPanel(new FlowLayout(FlowLayout.CENTER));
         middlePanelBottom = new JPanel(new GridLayout(1,2));
+        middlePanelContainer = new JPanel(new BorderLayout());
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -125,6 +129,19 @@ public class GUI extends JFrame implements ActionListener{
         personInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));//new GridLayout(5,1)
         personTextFieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
+
+        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
+        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
+        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
+        middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
+        bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
+
+        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
+        personButtonPanel.setPreferredSize(new Dimension(100, 40));
+        selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
+        personInfoPanel.setPreferredSize(new Dimension(200, 200));
+        personTextFieldsPanel.setPreferredSize(new Dimension(50, 50));
+        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         fullScreenPanel.setBackground(colorOrangeLight);
         topPanel.setBackground(colorRedGentle);
@@ -135,17 +152,7 @@ public class GUI extends JFrame implements ActionListener{
         personButtonPanel.setBackground(colorRedGentle);
         personDropdownPanel.setBackground(colorRedGentle);
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
-        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
-        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
-        bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
-        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
-        personButtonPanel.setPreferredSize(new Dimension(100, 40));
-        selectedPersonPanel.setPreferredSize(new Dimension(WIDTH, 50));
-        personInfoPanel.setPreferredSize(new Dimension(200, 200));
-        personTextFieldsPanel.setPreferredSize(new Dimension(50, 50));
-        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
@@ -164,16 +171,19 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
+        selectedPersonLabel.setVerticalTextPosition(SwingConstants.CENTER);
+        selectedPersonLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         selectedPersonPanel.add(selectedPersonLabel, BorderLayout.CENTER);
         middlePanelTop.add(selectedPersonPanel);
 
-        //Bottom left Panel holding Person info text ("First Name: ", etc.)
+        //Middle left Panel holding Person info text ("First Name: ", etc.)
 
         firstNameLabel = new JLabel("First Name: ");
         lastNameLabel = new JLabel("Last Name: ");
         govIDLabel = new JLabel("Government ID: ");
         studentIDLabel = new JLabel("Student ID: ");
         dobLabel = new JLabel("Date of Birth: ");
+
         personInfoPanel.add(firstNameLabel);
         personInfoPanel.add(lastNameLabel);
         personInfoPanel.add(govIDLabel);
@@ -181,8 +191,7 @@ public class GUI extends JFrame implements ActionListener{
         personInfoPanel.add(dobLabel);
 
 
-        //Bottom right Panel holding Person fields
-
+        //Middle right Panel holding Person fields
 
         firstNameField = new JTextField(15);
         lastNameField = new JTextField(15);
@@ -199,6 +208,8 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
 
+
+
         dateDropdownsPanel.add(dayDropdown);
         dateDropdownsPanel.add(monthDropdown);
         dateDropdownsPanel.add(yearDropdown);
@@ -206,24 +217,43 @@ public class GUI extends JFrame implements ActionListener{
         //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
 
-        topPanel.add(personDropdownPanel);
-        topPanel.add(personButtonPanel);
 
-        middlePanelTop.add(selectedPersonPanel);
+        newPersonButton.setFont(mainFont);
+        editPersonButton.setFont(mainFont);
+        deletePersonButton.setFont(mainFont);
+
+        selectedPersonLabel.setFont(mainFont);
+
+        firstNameLabel.setFont(mainFont);
+        lastNameLabel.setFont(mainFont);
+        govIDLabel.setFont(mainFont);
+        studentIDLabel.setFont(mainFont);
+        dobLabel.setFont(mainFont);
+
+        monthDropdown.setFont(mainFont);
+        dayDropdown.setFont(mainFont);
+        yearDropdown.setFont(mainFont);
+
+        storePersonButton.setFont(mainFont);
+
+        //topPanel.add(personDropdownPanel);
+        //topPanel.add(personButtonPanel);
+
+        //middlePanelTop.add(selectedPersonPanel);
 
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
         middlePanelBottom.add(dateDropdownsPanel);
 
-
+        middlePanelContainer.add(middlePanelTop, BorderLayout.NORTH);
+        middlePanelContainer.add(middlePanelBottom, BorderLayout.CENTER);
 
         bottomPanel.add(storePersonButton);
 
         fullScreenPanel.setLayout(new BorderLayout());
 
         fullScreenPanel.add(topPanel, BorderLayout.PAGE_START);
-        fullScreenPanel.add(middlePanelTop, BorderLayout.LINE_START);
-        fullScreenPanel.add(middlePanelBottom, BorderLayout.LINE_END);
+        fullScreenPanel.add(middlePanelContainer, BorderLayout.CENTER);
         fullScreenPanel.add(bottomPanel, BorderLayout.PAGE_END);
 
         add(fullScreenPanel);
