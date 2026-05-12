@@ -208,9 +208,9 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
 
-        dateDropdownsPanel.add(dayDropdown);
-        dateDropdownsPanel.add(monthDropdown);
-        dateDropdownsPanel.add(yearDropdown);
+        dateDropdownsPanel.add(dayDropdown, BorderLayout.LINE_START);
+        dateDropdownsPanel.add(monthDropdown, BorderLayout.CENTER);
+        dateDropdownsPanel.add(yearDropdown, BorderLayout.LINE_END);
 
         personTextFieldsPanel.add(dateDropdownsPanel);
 
