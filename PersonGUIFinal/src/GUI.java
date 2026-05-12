@@ -60,7 +60,7 @@ public class GUI extends JFrame implements ActionListener{
 
 
     public GUI(){
-        super("Temporary Title");
+        super("Person GUI App - Makayla, Victoria, Jamie");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         controller = new Controller();
 
@@ -126,13 +126,13 @@ public class GUI extends JFrame implements ActionListener{
         personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel = new JPanel(new BorderLayout());
-        personInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));//new GridLayout(5,1)
-        personTextFieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));//new GridLayout(4,1)
+        personInfoPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(5,1)
+        personTextFieldsPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
+        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
         middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
-        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
+        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 400));
         middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
         bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
@@ -140,7 +140,7 @@ public class GUI extends JFrame implements ActionListener{
         personButtonPanel.setPreferredSize(new Dimension(100, 40));
         selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
-        personTextFieldsPanel.setPreferredSize(new Dimension(50, 50));
+        personTextFieldsPanel.setPreferredSize(new Dimension(100, 50));
         dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         fullScreenPanel.setBackground(colorOrangeLight);
@@ -204,19 +204,18 @@ public class GUI extends JFrame implements ActionListener{
         personTextFieldsPanel.add(studentIDField);
 
         //Bottom right Panel holding date dropdowns
-        monthDropdown = new JComboBox<>();
+        monthDropdown = new JComboBox<>(months);
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
-
-
 
         dateDropdownsPanel.add(dayDropdown);
         dateDropdownsPanel.add(monthDropdown);
         dateDropdownsPanel.add(yearDropdown);
 
+        personTextFieldsPanel.add(dateDropdownsPanel);
+
         //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
-
 
         newPersonButton.setFont(mainFont);
         editPersonButton.setFont(mainFont);
@@ -243,7 +242,6 @@ public class GUI extends JFrame implements ActionListener{
 
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
-        middlePanelBottom.add(dateDropdownsPanel);
 
         middlePanelContainer.add(middlePanelTop, BorderLayout.NORTH);
         middlePanelContainer.add(middlePanelBottom, BorderLayout.CENTER);
