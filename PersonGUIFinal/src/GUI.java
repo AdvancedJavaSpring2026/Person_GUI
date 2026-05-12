@@ -21,6 +21,7 @@ public class GUI extends JFrame implements ActionListener{
     Color colorOrangeDark = new Color(255, 150, 113);
     Color colorOrangeLight = new Color(255, 199, 95);
     Color colorYellow = new Color(249, 248, 113);
+    
 
     //Fonts
     Font mainFont = new Font("Times New Roman", Font.PLAIN, 14);
@@ -149,6 +150,9 @@ public class GUI extends JFrame implements ActionListener{
         personButtonPanel.setBackground(colorRedGentle);
         personDropdownPanel.setBackground(colorRedGentle);
 
+        // Forces the JComboBoxes to look normal even when disabled
+        UIManager.put("ComboBox.disabledForeground", UIManager.getColor("ComboBox.foreground"));
+        UIManager.put("ComboBox.disabledBackground", UIManager.getColor("ComboBox.background"));
 
 
         //Top left Panel holding Person Dropdown Box
@@ -387,6 +391,7 @@ public class GUI extends JFrame implements ActionListener{
             if (personDropdown.getSelectedItem().getClass().equals(Person.class)) {
                 Person p = (Person)personDropdown.getSelectedItem();
                 OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
                 govIDField.setText("");
@@ -399,6 +404,7 @@ public class GUI extends JFrame implements ActionListener{
             else if (personDropdown.getSelectedItem().getClass().equals(RegisteredPerson.class)) {
                 RegisteredPerson p = (RegisteredPerson)personDropdown.getSelectedItem();
                 OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
                 govIDField.setText(p.getGovernmentID());
@@ -411,6 +417,7 @@ public class GUI extends JFrame implements ActionListener{
             else if (personDropdown.getSelectedItem().getClass().equals(OCCCPerson.class)) {
                 OCCCPerson p = (OCCCPerson)personDropdown.getSelectedItem();
                 OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
                 govIDField.setText(p.getGovernmentID());
@@ -441,11 +448,11 @@ public class GUI extends JFrame implements ActionListener{
             controller.startEditingPerson((Person)personDropdown.getSelectedItem());
         }
         
-        personDropdown.setEnabled(false);
-        firstNameField.setEnabled(true);
-        lastNameField.setEnabled(true);
-        govIDField.setEnabled(true);
-        studentIDField.setEnabled(true);
+        personDropdown.setEditable(false);
+        firstNameField.setEditable(true);
+        lastNameField.setEditable(true);
+        govIDField.setEditable(true);
+        studentIDField.setEditable(true);
         dayDropdown.setEnabled(true);
         monthDropdown.setEnabled(true);
         yearDropdown.setEnabled(true);
@@ -461,11 +468,11 @@ public class GUI extends JFrame implements ActionListener{
     }
     
     private void closeInputFields() { // Closes all the input fields when Person object creation is finished
-        personDropdown.setEnabled(true);
-        firstNameField.setEnabled(false);
-        lastNameField.setEnabled(false);
-        govIDField.setEnabled(false);
-        studentIDField.setEnabled(false);
+        personDropdown.setEditable(true);
+        firstNameField.setEditable(false);
+        lastNameField.setEditable(false);
+        govIDField.setEditable(false);
+        studentIDField.setEditable(false);
         dayDropdown.setEnabled(false);
         monthDropdown.setEnabled(false);
         yearDropdown.setEnabled(false);
@@ -476,7 +483,6 @@ public class GUI extends JFrame implements ActionListener{
         fileMenu_saveAs.setEnabled(true);
         
         newPersonButton.setEnabled(true);
-        editPersonButton.setEnabled(true);
         deletePersonButton.setEnabled(true);
     }
 
