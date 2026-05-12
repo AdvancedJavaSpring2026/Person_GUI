@@ -200,7 +200,7 @@ public class GUI extends JFrame implements ActionListener{
         personTextFieldsPanel.add(studentIDField);
 
         //Bottom right Panel holding date dropdowns
-        monthDropdown = new JComboBox<>(months);
+        monthDropdown = new JComboBox<>(MONTHS);
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
 
