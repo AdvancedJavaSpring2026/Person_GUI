@@ -33,16 +33,9 @@ public class OCCCDate implements Serializable, Comparable<OCCCDate>
     // day, month and year
     // Throws an InvalidOCCCDateException if the provided values do not produce
     // a valid date
-    public OCCCDate(int day, int month, int year) throws InvalidOCCCDateException
+    public OCCCDate(int day, int month, int year)
     {
-        GregorianCalendar calendar = new GregorianCalendar(year, month - 1, day);
-        
-        if (calendar.get(GregorianCalendar.YEAR) != year ||
-                calendar.get(GregorianCalendar.MONTH) + 1 != month ||
-                calendar.get(GregorianCalendar.DAY_OF_MONTH) != day)
-            throw new InvalidOCCCDateException();
-        
-        this(calendar);
+        this(createValidCalendar(day, month, year));
     }
     
     // This constructor creates a copy from another OCCCDate
@@ -59,6 +52,19 @@ public class OCCCDate implements Serializable, Comparable<OCCCDate>
         dayOfMonth = gc.get(GregorianCalendar.DAY_OF_MONTH);
         monthOfYear = gc.get(GregorianCalendar.MONTH) + 1;
         year = gc.get(GregorianCalendar.YEAR);
+    }
+    
+    private static GregorianCalendar createValidCalendar(int day, int month, int year) throws InvalidOCCCDateException
+    {
+        GregorianCalendar calendar = new GregorianCalendar(year, month - 1, day);
+        if (calendar.get(GregorianCalendar.YEAR) != year ||
+                calendar.get(GregorianCalendar.MONTH) + 1 != month ||
+                calendar.get(GregorianCalendar.DAY_OF_MONTH) != day)
+            throw new InvalidOCCCDateException();
+        else
+        {
+            return calendar;
+        }
     }
     
     // Returns the integer value of the day of the month
