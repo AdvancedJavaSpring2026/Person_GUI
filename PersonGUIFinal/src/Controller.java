@@ -90,9 +90,40 @@ public class Controller {
         return returnVal;
     }
     
-    public int startNewFile() {
-        // Will prompt the user if there is any unsaved data and reset variables to default/empty states
-        return -1;
+    public int startNewFile() { // Checks for unsaved data and then resets fields to their default states
+        if (checkUnsavedData()) {
+            personList = new ArrayList<>();
+            currentFile = null;
+            fileIsDirty = false;
+            return 0;
+        }
+        else
+            return 1;
+    }
+    
+    public boolean checkUnsavedData() { // Prompts the user for how to handle unsaved data if it exists; Returns true to continue operation or false to cancel
+        if (fileIsDirty) { // Prompts the user to save, not save, or cancel loading a new file if unsaved data exists
+            int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (returnVal == JOptionPane.YES_OPTION) {
+                switch (save()) {
+                    case 0: return true;
+                    
+                    case 1: return false;
+                    
+                    case -1: return false;
+                    
+                    default: return false;
+                }
+            }
+            else if (returnVal == JOptionPane.NO_OPTION) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else
+            return true;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob){

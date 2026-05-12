@@ -11,6 +11,8 @@ public class GUI extends JFrame implements ActionListener{
 
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 1024;
+    private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"};
 
     //Custom Colors
     Color colorPurpleDark = new Color(132, 94, 194);
@@ -52,8 +54,6 @@ public class GUI extends JFrame implements ActionListener{
     JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
     JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
-    String[] months = {"January", "February", "March", "April", "May", "June", 
-        "July", "August", "September", "October", "November", "December"};
     
     //Controller that handles logic operations
     Controller controller;
@@ -67,11 +67,7 @@ public class GUI extends JFrame implements ActionListener{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e){
-                //Popup
-                //Check if needing to Save,
-                // if yes, then Save,
-                // if No then close,
-                // if Cancel then get rid of popup and do nothing
+                exitProgram();
             }
         });
 
@@ -104,11 +100,11 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown.addActionListener(this);
         yearDropdown.addActionListener(e -> refreshDayComboBox());
         
-        fileMenu_new.addActionListener(this);
+        fileMenu_new.addActionListener(e -> startNewFile());
         fileMenu_open.addActionListener(e -> loadFile());
         fileMenu_save.addActionListener(e -> saveFile(false));
         fileMenu_saveAs.addActionListener(e -> saveFile(true));
-        fileMenu_exit.addActionListener(this);
+        fileMenu_exit.addActionListener(e -> exitProgram());
         helpMenu_help.addActionListener(this);
         helpMenu_about.addActionListener(this);
     }
@@ -307,7 +303,7 @@ public class GUI extends JFrame implements ActionListener{
     private void setUpDateBoxes() { // Gives the date combo boxes their initial values
         for (int i = 1900; i < java.time.Year.now().getValue(); i++) // Adds every year from 1900 to now for yearDropdown
             yearDropdown.addItem(i);
-        for (String month : months)
+        for (String month : MONTHS)
             monthDropdown.addItem(month);
         yearDropdown.setSelectedIndex(yearDropdown.getItemCount() - 1);
         monthDropdown.setSelectedIndex(0);
@@ -485,6 +481,17 @@ public class GUI extends JFrame implements ActionListener{
     
     private void startNewFile() { // Calls the controller to start a new file
         int result = controller.startNewFile();
+        if (result == 0) {
+            refreshPersonComboBox();
+            personDropdown.setSelectedIndex(-1);
+        }
+    }
+    
+    private void exitProgram() { // Checks for unsaved data and then closes the frame and the program
+        if (controller.checkUnsavedData()) {
+            this.dispose();
+            System.exit(0);
+        }
     }
 
 }
