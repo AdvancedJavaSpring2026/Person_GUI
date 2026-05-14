@@ -1,5 +1,10 @@
+// Jamie Whitmarsh and Makayla Wood
+// Class to display and operate the program's GUI
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import javax.swing.*;
 
 public class GUI extends JFrame implements ActionListener{
@@ -9,6 +14,8 @@ public class GUI extends JFrame implements ActionListener{
 
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 1024;
+    private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"};
 
     //Custom Colors
     Color colorPurpleDark = new Color(132, 94, 194);
@@ -17,6 +24,10 @@ public class GUI extends JFrame implements ActionListener{
     Color colorOrangeDark = new Color(255, 150, 113);
     Color colorOrangeLight = new Color(255, 199, 95);
     Color colorYellow = new Color(249, 248, 113);
+    
+
+    //Fonts
+    Font mainFont = new Font("Times New Roman", Font.PLAIN, 14);
 
     //Menu components
     JMenuItem fileMenu_new;
@@ -29,7 +40,7 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem helpMenu_about;
 
     //Layout components
-    JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, bottomPanel, personDropdownPanel,
+    JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, middlePanelContainer, bottomPanel, personDropdownPanel,
             personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel;
     GridBagLayout gridBagLayout;
     GridBagConstraints topPanConstraints, bottomPanConstraints;
@@ -42,31 +53,33 @@ public class GUI extends JFrame implements ActionListener{
     JComboBox<Integer> yearDropdown;
 
     //Data (this may wind up being in Victoria's work, and deleted here)
-    String firstName, lastName, studentID, govID;
     String selectedPersonsText = " SELECTED PERSON INFORMATION";
     JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
     JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
+    
+    //Controller that handles logic operations
+    Controller controller;
 
 
     public GUI(){
-        super("Temporary Title");
+        super("Person GUI App - Makayla, Victoria, Jamie");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        controller = new Controller();
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e){
-                //Popup
-                //Check if needing to Save,
-                // if yes, then Save,
-                // if No then close,
-                // if Cancel then get rid of popup and do nothing
+                exitProgram();
             }
         });
 
         setUpMenu();
 
         setGUILayout();
+        setUpDateBoxes();
+        closeInputFields();
+        
         addActionListeners();
         this.pack();
 
@@ -79,36 +92,55 @@ public class GUI extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 
     private void addActionListeners(){
-        newPersonButton.addActionListener(this);
-        editPersonButton.addActionListener(this);
-        deletePersonButton.addActionListener(this);
-        storePersonButton.addActionListener(this);
-        personDropdown.addActionListener(this);
-        monthDropdown.addActionListener(this);
-        dayDropdown.addActionListener(this);
-        yearDropdown.addActionListener(this);
-
+        newPersonButton.addActionListener(e -> openInputFields(true));
+        editPersonButton.addActionListener(e -> openInputFields(false));
+        deletePersonButton.addActionListener(e -> deletePersonFromList());
+        storePersonButton.addActionListener(e -> addPersonToList());
+        personDropdown.addActionListener(e -> personDropdownAction());
+        monthDropdown.addActionListener(e -> refreshDayComboBox());
+        yearDropdown.addActionListener(e -> refreshDayComboBox());
+        
+        fileMenu_new.addActionListener(e -> startNewFile());
+        fileMenu_open.addActionListener(e -> loadFile());
+        fileMenu_save.addActionListener(e -> saveFile(false));
+        fileMenu_saveAs.addActionListener(e -> saveFile(true));
+        fileMenu_exit.addActionListener(e -> exitProgram());
+        helpMenu_help.addActionListener(e -> showHelpDialog());
+        helpMenu_about.addActionListener(e -> showAboutDialog());
     }
 
     private void setGUILayout(){
         setLayout(new GridLayout(1, 1));
 
         fullScreenPanel = new JPanel();
-        topPanel = new JPanel();
-        middlePanelTop = new JPanel();
-        middlePanelBottom = new JPanel();
-        bottomPanel = new JPanel();
+        topPanel = new JPanel(new GridLayout(1,2));
+        middlePanelTop = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        middlePanelBottom = new JPanel(new GridLayout(1,2));
+        middlePanelContainer = new JPanel(new BorderLayout());
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel = new JPanel(new BorderLayout());
-        personInfoPanel = new JPanel(new GridLayout(5,1));
-        personTextFieldsPanel = new JPanel(new GridLayout(4,1));
+        personInfoPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(5,1)
+        personTextFieldsPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
+
+        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
+        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
+        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 400));
+        middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
+        bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
+
+        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
+        personButtonPanel.setPreferredSize(new Dimension(100, 40));
+        selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
+        personInfoPanel.setPreferredSize(new Dimension(200, 200));
+        personTextFieldsPanel.setPreferredSize(new Dimension(100, 50));
+        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
         fullScreenPanel.setBackground(colorOrangeLight);
         topPanel.setBackground(colorRedGentle);
@@ -116,30 +148,21 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelBottom.setBackground(colorYellow);
         bottomPanel.setBackground(colorPurpleDark);
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
-        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 200));
-        middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 700));
-        bottomPanel.setPreferredSize(new Dimension(WIDTH, 200));
+        personButtonPanel.setBackground(colorRedGentle);
+        personDropdownPanel.setBackground(colorRedGentle);
 
-        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
-        personButtonPanel.setPreferredSize(new Dimension(100, 100));
-        selectedPersonPanel.setPreferredSize(new Dimension(200, 200));
-        personInfoPanel.setPreferredSize(new Dimension(200, 200));
-        personTextFieldsPanel.setPreferredSize(new Dimension(200, 200));
-        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
-
-        topPanel.setLayout(new GridLayout(1,2));
+        // Forces the JComboBoxes to look normal even when disabled
+        UIManager.put("ComboBox.disabledForeground", UIManager.getColor("ComboBox.foreground"));
+        UIManager.put("ComboBox.disabledBackground", UIManager.getColor("ComboBox.background"));
 
 
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
 
-
         //Top right Panel holding Person buttons
-        personButtonPanel.setLayout(new GridLayout(1, 3));
-
         newPersonButton = new JButton("New Person");
         editPersonButton = new JButton("Edit Person");
+        editPersonButton.setEnabled(false); // Edit button isn't available until a Person object is chosen from personDropdown
         deletePersonButton = new JButton("Delete Person");
 
         personDropdownPanel.add(personDropdown);
@@ -151,22 +174,19 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
-        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-        selectedPersonPanel.add(selectedPersonLabel);
-
+        selectedPersonLabel.setVerticalTextPosition(SwingConstants.CENTER);
+        selectedPersonLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        selectedPersonPanel.add(selectedPersonLabel, BorderLayout.CENTER);
         middlePanelTop.add(selectedPersonPanel);
 
-
-        middlePanelBottom.setLayout(new GridLayout(1,2));
-
-        //Bottom left Panel holding Person info text ("First Name: ", etc.)
+        //Middle left Panel holding Person info text ("First Name: ", etc.)
 
         firstNameLabel = new JLabel("First Name: ");
         lastNameLabel = new JLabel("Last Name: ");
         govIDLabel = new JLabel("Government ID: ");
         studentIDLabel = new JLabel("Student ID: ");
         dobLabel = new JLabel("Date of Birth: ");
+
         personInfoPanel.add(firstNameLabel);
         personInfoPanel.add(lastNameLabel);
         personInfoPanel.add(govIDLabel);
@@ -174,8 +194,7 @@ public class GUI extends JFrame implements ActionListener{
         personInfoPanel.add(dobLabel);
 
 
-        //Bottom right Panel holding Person fields
-
+        //Middle right Panel holding Person fields
 
         firstNameField = new JTextField(15);
         lastNameField = new JTextField(15);
@@ -188,40 +207,55 @@ public class GUI extends JFrame implements ActionListener{
         personTextFieldsPanel.add(studentIDField);
 
         //Bottom right Panel holding date dropdowns
-        monthDropdown = new JComboBox<>();
+        monthDropdown = new JComboBox<>(MONTHS);
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
 
-        dateDropdownsPanel.add(dayDropdown);
-        dateDropdownsPanel.add(monthDropdown);
-        dateDropdownsPanel.add(yearDropdown);
+        dateDropdownsPanel.add(dayDropdown, BorderLayout.LINE_START);
+        dateDropdownsPanel.add(monthDropdown, BorderLayout.CENTER);
+        dateDropdownsPanel.add(yearDropdown, BorderLayout.LINE_END);
+
+        personTextFieldsPanel.add(dateDropdownsPanel);
 
         //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
+        storePersonButton.setEnabled(false); // Store button not enabled until user enters editing mode
 
+        newPersonButton.setFont(mainFont);
+        editPersonButton.setFont(mainFont);
+        deletePersonButton.setFont(mainFont);
 
+        selectedPersonLabel.setFont(mainFont);
 
-        topPanel.setLayout(new GridLayout(1,2));
-        topPanel.add(personDropdownPanel);
-        topPanel.add(personButtonPanel);
+        firstNameLabel.setFont(mainFont);
+        lastNameLabel.setFont(mainFont);
+        govIDLabel.setFont(mainFont);
+        studentIDLabel.setFont(mainFont);
+        dobLabel.setFont(mainFont);
 
-        middlePanelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
-        middlePanelTop.add(selectedPersonPanel);
+        monthDropdown.setFont(mainFont);
+        dayDropdown.setFont(mainFont);
+        yearDropdown.setFont(mainFont);
 
-        middlePanelBottom.setLayout(new GridLayout(1,2));
+        storePersonButton.setFont(mainFont);
+
+        //topPanel.add(personDropdownPanel);
+        //topPanel.add(personButtonPanel);
+
+        //middlePanelTop.add(selectedPersonPanel);
+
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
-        middlePanelBottom.add(dateDropdownsPanel);
 
+        middlePanelContainer.add(middlePanelTop, BorderLayout.NORTH);
+        middlePanelContainer.add(middlePanelBottom, BorderLayout.CENTER);
 
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(storePersonButton);
 
         fullScreenPanel.setLayout(new BorderLayout());
 
         fullScreenPanel.add(topPanel, BorderLayout.PAGE_START);
-        fullScreenPanel.add(middlePanelTop, BorderLayout.LINE_START);
-        fullScreenPanel.add(middlePanelBottom, BorderLayout.LINE_END);
+        fullScreenPanel.add(middlePanelContainer, BorderLayout.CENTER);
         fullScreenPanel.add(bottomPanel, BorderLayout.PAGE_END);
 
         add(fullScreenPanel);
@@ -237,31 +271,24 @@ public class GUI extends JFrame implements ActionListener{
         fileMenu.setMnemonic(KeyEvent.VK_H);
 
         fileMenu_new = new JMenuItem("New");
-        fileMenu_new.addActionListener(this);
         fileMenu_new.setMnemonic(KeyEvent.VK_N);
 
         fileMenu_open = new JMenuItem("Open...");
-        fileMenu_open.addActionListener(this);
         fileMenu_open.setMnemonic(KeyEvent.VK_O);
 
         fileMenu_save = new JMenuItem("Save");
-        fileMenu_save.addActionListener(this);
         fileMenu_save.setMnemonic(KeyEvent.VK_V);
 
         fileMenu_saveAs = new JMenuItem("Save As...");
-        fileMenu_saveAs.addActionListener(this);
         fileMenu_saveAs.setMnemonic(KeyEvent.VK_A);
 
         fileMenu_exit = new JMenuItem("Exit");
-        fileMenu_exit.addActionListener(this);
         fileMenu_exit.setMnemonic(KeyEvent.VK_X);
 
         helpMenu_help = new JMenuItem("Help");
-        helpMenu_help.addActionListener(this);
         helpMenu_help.setMnemonic(KeyEvent.VK_P);
 
         helpMenu_about = new JMenuItem("About");
-        helpMenu_about.addActionListener(this);
         helpMenu_about.setMnemonic(KeyEvent.VK_B);
 
         fileMenu.add(fileMenu_new);
@@ -279,7 +306,273 @@ public class GUI extends JFrame implements ActionListener{
         bar.add(helpMenu);
         setJMenuBar(bar);
     }
+    
+    private void setUpDateBoxes() { // Gives the date combo boxes their initial values
+        for (int i = java.time.Year.now().getValue() - 1; i > 1899; i--) // Adds every year from 2025 to 1900 for yearDropdown
+            yearDropdown.addItem(i);
+        for (String month : MONTHS)
+            monthDropdown.addItem(month);
+        yearDropdown.setSelectedIndex(0);
+        monthDropdown.setSelectedIndex(0);
+        refreshDayComboBox();
+    }
+    
+    private void addPersonToList() { // Takes the information from the current fields, creates a new person object and adds it to the list
+        // Checks to make sure that required fields are filled out
+        if (firstNameField.getText().isBlank())
+            JOptionPane.showMessageDialog(this, "First name is a required field!", "", JOptionPane.INFORMATION_MESSAGE);
+        else if (lastNameField.getText().isBlank())
+            JOptionPane.showMessageDialog(this, "Last name is a required field!", "", JOptionPane.INFORMATION_MESSAGE);
+        else if (!studentIDField.getText().isBlank() && govIDField.getText().isBlank())
+            JOptionPane.showMessageDialog(this, "Government ID is required for persons with student ID", "", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Determines what kind of Person object to make and calls the controller to add it to the list with the data provided in each field
+        else {
+            try {
+                if (!govIDField.getText().isBlank()) {
+                    if (!studentIDField.getText().isBlank()) {
+                        controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                                new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()), 
+                                govIDField.getText(), studentIDField.getText());
+                    }
+                    else {
+                        controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                                new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()), 
+                                govIDField.getText());
+                    }
+                }
+                else {
+                    controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                                new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()));
+                }
+                refreshPersonComboBox(); // Ensures that the newly added Person is displayed to the user
+            } catch (InvalidOCCCDateException ex) {
+                JOptionPane.showMessageDialog(this, ex.toString(), "Error", JOptionPane.ERROR_MESSAGE); // Throws error message if OCCCDate throws and exception
+            }
+            closeInputFields(); // After Person object is added, the program gets out of person editing/creation mode
+        }
+        
+        
+    }
+    
+    private void cancelEditing() { // Exits editing mode discarding any changes made
+        controller.stopEditingPerson();
+        closeInputFields();
+        personDropdownAction();
+    }
+    
+    private void deletePersonFromList() { // Deletes the selected Person object
+        if (personDropdown.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "No person selected for deletion", "", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else {
+            Person p = (Person)personDropdown.getSelectedItem();
+            String name = p.getFirstName() + " " + p.getLastName();
+            int returnVal = JOptionPane.showConfirmDialog(this, "Are you sure that you would like to delete " + name + "?", 
+                    "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            if (returnVal == JOptionPane.YES_OPTION) {
+                controller.removePersonFromList(p);
+                refreshPersonComboBox();
+            }
+        }
+    }
+    
+    private void refreshPersonComboBox() { // Gets the latest list of People objects and puts it into the combo box
+        personDropdown.removeAllItems();
+        ArrayList<Person> pl = controller.getPersonList();
+        pl.sort(Comparator.comparing(Person::getLastName));
+        for (Person p : pl)
+            personDropdown.addItem(p);
+    }
+    
+    private void personDropdownAction() { // When the personDropdown index changes, this runs to make all the fields match the user's current selection
+        if (personDropdown.getSelectedIndex() == -1) {
+            selectedPersonLabel.setText("");
+            firstNameField.setText("");
+            lastNameField.setText("");
+            govIDField.setText("");
+            studentIDField.setText("");
+            yearDropdown.setSelectedIndex(0);
+            monthDropdown.setSelectedIndex(0);
+            editPersonButton.setEnabled(false);
+        }
+        else {
+            if (personDropdown.getSelectedItem().getClass().equals(Person.class)) {
+                Person p = (Person)personDropdown.getSelectedItem();
+                OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
+                firstNameField.setText(p.getFirstName());
+                lastNameField.setText(p.getLastName());
+                govIDField.setText("");
+                studentIDField.setText("");
+                yearDropdown.setSelectedItem(dob.getYear());
+                monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
+                dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
+            }
+            else if (personDropdown.getSelectedItem().getClass().equals(RegisteredPerson.class)) {
+                RegisteredPerson p = (RegisteredPerson)personDropdown.getSelectedItem();
+                OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
+                firstNameField.setText(p.getFirstName());
+                lastNameField.setText(p.getLastName());
+                govIDField.setText(p.getGovernmentID());
+                studentIDField.setText("");
+                yearDropdown.setSelectedItem(dob.getYear());
+                monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
+                dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
+            }
+            else if (personDropdown.getSelectedItem().getClass().equals(OCCCPerson.class)) {
+                OCCCPerson p = (OCCCPerson)personDropdown.getSelectedItem();
+                OCCCDate dob = p.getDOB();
+                selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
+                firstNameField.setText(p.getFirstName());
+                lastNameField.setText(p.getLastName());
+                govIDField.setText(p.getGovernmentID());
+                studentIDField.setText(p.getStudentID());
+                yearDropdown.setSelectedItem(dob.getYear());
+                monthDropdown.setSelectedIndex(dob.getMonthNumber() - 1);
+                dayDropdown.setSelectedIndex(dob.getDayofMonth() - 1);
+                editPersonButton.setEnabled(true);
+            }
+        }
+    }
+    
+    private void refreshDayComboBox() { // Gets the current number of days in the month and refreshs the day combo box
+        int numDays = Controller.getNumberOfDaysInMonth(monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem());
+        dayDropdown.removeAllItems();
+        for (int i = 1; i <= numDays; i++)
+            dayDropdown.addItem(i);
+        dayDropdown.setSelectedIndex(0);
+    }
+    
+    private void openInputFields(boolean forNewPerson) { // Opens all the input fields to create a new Person object
+        // If this is for a new person, the combo box is set to have no selection
+        if (forNewPerson) {
+            personDropdown.setSelectedIndex(-1);
+            selectedPersonLabel.setText("NEW PERSON");
+        }
+        else {
+            controller.startEditingPerson((Person)personDropdown.getSelectedItem());
+        }
+        
+        personDropdown.setEditable(false);
+        firstNameField.setEditable(true);
+        lastNameField.setEditable(true);
+        govIDField.setEditable(true);
+        studentIDField.setEditable(true);
+        dayDropdown.setEnabled(true);
+        monthDropdown.setEnabled(true);
+        yearDropdown.setEnabled(true);
+        
+        fileMenu_new.setEnabled(false);
+        fileMenu_open.setEnabled(false);
+        fileMenu_save.setEnabled(false);
+        fileMenu_saveAs.setEnabled(false);
+        
+        newPersonButton.setEnabled(false);
+        editPersonButton.setEnabled(false);
+        deletePersonButton.setEnabled(false);
+        storePersonButton.setEnabled(true);
+    }
+    
+    private void closeInputFields() { // Closes all the input fields when Person object creation is finished
+        personDropdown.setEditable(true);
+        firstNameField.setEditable(false);
+        lastNameField.setEditable(false);
+        govIDField.setEditable(false);
+        studentIDField.setEditable(false);
+        dayDropdown.setEnabled(false);
+        monthDropdown.setEnabled(false);
+        yearDropdown.setEnabled(false);
+        
+        fileMenu_new.setEnabled(true);
+        fileMenu_open.setEnabled(true);
+        fileMenu_save.setEnabled(true);
+        fileMenu_saveAs.setEnabled(true);
+        
+        newPersonButton.setEnabled(true);
+        deletePersonButton.setEnabled(true);
+        storePersonButton.setEnabled(false);
+        if (personDropdown.getSelectedIndex() != -1)
+            editPersonButton.setEnabled(true);
+    }
 
-
+    private void saveFile(boolean saveAsNewFile) { // Saves the user's current work
+        int result = 2; // Default value that won't trigger a message
+        
+        if (saveAsNewFile || !controller.currentFileExists())
+            result = controller.saveAsNew();
+        else 
+            result = controller.save();
+        
+        if (result == -1)
+            JOptionPane.showMessageDialog(this, "An error has occurred saving your file. Please try again", "Saving Error", JOptionPane.ERROR_MESSAGE);
+        else if (result == 0)
+            JOptionPane.showMessageDialog(this, "Your file saved successfully!", "File Saved", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    private void loadFile() { // Calls the controller to load a file
+        int result = controller.loadPeopleFile();
+        if (result == 0) {
+            refreshPersonComboBox(); // Loads the new Person list into the dropdown 
+            personDropdown.setSelectedIndex(-1);
+        }
+        else if (result == -1) 
+            JOptionPane.showMessageDialog(this, "An error has occurred loading your file. Please try again", "Loading Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void startNewFile() { // Calls the controller to start a new file
+        int result = controller.startNewFile();
+        if (result == 0) {
+            refreshPersonComboBox();
+            personDropdown.setSelectedIndex(-1);
+        }
+    }
+    
+    private void exitProgram() { // Checks for unsaved data and then closes the frame and the program
+        if (controller.checkUnsavedData()) {
+            this.dispose();
+            System.exit(0);
+        }
+    }
+    
+    private void showHelpDialog() { // Shows the user a JOptionPane to explain how to operate the program
+        String helpText = "<html><head><title>Help</title></head><body>"
+                + "<h3>Viewing Records</h3><ul><li>The combo box at the top of the window displays all currently loaded records.</li>"
+                + "<li>Select a person from the list to view their information in the fields below.</li></ul>"
+                + "<h3>Creating a New Person</h3><ol><li>Click <b>New Person</b>.</li>"
+                + "<li>Enter the person's information in the editable fields.</li>"
+                + "<li>Click <b>Store Person</b> to save the new record.</li>"
+                + "<li>Click <b>Cancel Editing</b> to discard changes.</li></ol>"
+                + "<h3>Editing an Existing Person</h3><ol><li>Select a person from the combo box.</li>"
+                + "<li>Click <b>Edit Person</b>.</li>"
+                + "<li>Modify the desired information.</li>"
+                + "<li>Click <b>Store Person</b> to save the changes.</li>"
+                + "<li>Click <b>Cancel Editing</b> to cancel without saving.</li></ol>"
+                + "<h3>Deleting a Person</h3><ol><li>Select the person you want to remove.</li>"
+                + "<li>Click <b>Delete Person</b>.</li>"
+                + "<li>Confirm the deletion if prompted.</li></ol>"
+                + "<h3>File Operations</h3><p>Use the <b>File</b> menu to:</p>"
+                + "<ul><li>Create a new file</li><li>Open an existing file</li><li>Save the current list of people</li>"
+                + "<li>Save data under a new file name</li><li>Exit the program</li></ul></body></html>";
+        JOptionPane.showMessageDialog(this, helpText, "Help", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    private void showAboutDialog() { // Shows the user a JOptionPane to tell the user about the progam
+        String aboutText = "<html><head><title>About Person GUI</title></head><body><h2>About Person GUI</h2><p>"
+                + "Person GUI is a program designed to manage objects within the Person<br>"
+                + "class hierarchy. Its implementation includes the use of Person,<br>"
+                + "RegisteredPerson, and OCCCPerson objects that utilize OCCCDate<br>"
+                + "objects as well as OCCCDateExceptions. Users can manage files<br>"
+                + "holding a list of Person objects to demonstrate the class hierarchy's<br>"
+                + "functionality.</p><h3>Credits</h3><ul>"
+                + "<li><b>Jamie Whitmarsh</b> - GUI design and implementation</li>"
+                + "<li><b>Veronica Edwards</b> - Person and OCCCDate hierarchy implementation</li>"
+                + "<li><b>Makayla Wood</b> - Program logic and operations</li>"
+                + "</ul></body></html>";
+        JOptionPane.showMessageDialog(this, aboutText, "About", JOptionPane.PLAIN_MESSAGE);
+    }
 
 }
