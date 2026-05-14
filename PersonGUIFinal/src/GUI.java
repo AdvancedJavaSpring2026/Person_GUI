@@ -1,3 +1,6 @@
+// Jamie Whitmarsh and Makayla Wood
+// Class to display and operate the program's GUI
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -50,7 +53,6 @@ public class GUI extends JFrame implements ActionListener{
     JComboBox<Integer> yearDropdown;
 
     //Data (this may wind up being in Victoria's work, and deleted here)
-    String firstName, lastName, studentID, govID;
     String selectedPersonsText = " SELECTED PERSON INFORMATION";
     JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
     JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
@@ -99,7 +101,6 @@ public class GUI extends JFrame implements ActionListener{
         storePersonButton.addActionListener(e -> addPersonToList());
         personDropdown.addActionListener(e -> personDropdownAction());
         monthDropdown.addActionListener(e -> refreshDayComboBox());
-        dayDropdown.addActionListener(this);
         yearDropdown.addActionListener(e -> refreshDayComboBox());
         
         fileMenu_new.addActionListener(e -> startNewFile());
@@ -161,6 +162,7 @@ public class GUI extends JFrame implements ActionListener{
         //Top right Panel holding Person buttons
         newPersonButton = new JButton("New Person");
         editPersonButton = new JButton("Edit Person");
+        editPersonButton.setEnabled(false); // Edit button isn't available until a Person object is chosen from personDropdown
         deletePersonButton = new JButton("Delete Person");
 
         personDropdownPanel.add(personDropdown);
@@ -217,6 +219,7 @@ public class GUI extends JFrame implements ActionListener{
 
         //Bottom panel for Storing Person
         storePersonButton = new JButton("Store Person");
+        storePersonButton.setEnabled(false); // Store button not enabled until user enters editing mode
 
         newPersonButton.setFont(mainFont);
         editPersonButton.setFont(mainFont);
@@ -352,6 +355,12 @@ public class GUI extends JFrame implements ActionListener{
         
     }
     
+    private void cancelEditing() { // Exits editing mode discarding any changes made
+        controller.stopEditingPerson();
+        closeInputFields();
+        personDropdownAction();
+    }
+    
     private void deletePersonFromList() { // Deletes the selected Person object
         if (personDropdown.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "No person selected for deletion", "", JOptionPane.INFORMATION_MESSAGE);
@@ -465,6 +474,7 @@ public class GUI extends JFrame implements ActionListener{
         newPersonButton.setEnabled(false);
         editPersonButton.setEnabled(false);
         deletePersonButton.setEnabled(false);
+        storePersonButton.setEnabled(true);
     }
     
     private void closeInputFields() { // Closes all the input fields when Person object creation is finished
@@ -484,6 +494,9 @@ public class GUI extends JFrame implements ActionListener{
         
         newPersonButton.setEnabled(true);
         deletePersonButton.setEnabled(true);
+        storePersonButton.setEnabled(false);
+        if (personDropdown.getSelectedIndex() != -1)
+            editPersonButton.setEnabled(true);
     }
 
     private void saveFile(boolean saveAsNewFile) { // Saves the user's current work

@@ -59,8 +59,8 @@ public class Controller {
             int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
             if (returnVal == JOptionPane.YES_OPTION)
                 save();
-            else if (returnVal == JOptionPane.CANCEL_OPTION)
-                return 0;
+            else if (returnVal == JOptionPane.CANCEL_OPTION || returnVal == JOptionPane.CLOSED_OPTION)
+                return 1;
         }
         // Gets the file from the user and loads it into the program
         JFileChooser chooser = new JFileChooser();
@@ -128,7 +128,7 @@ public class Controller {
             return true;
     }
     
-    // Each addPersonToList function creates a new Person object based on the provided information
+    // Each addPersonToList function creates a new Person object whose type is based on the provided information
     // and adds it to personList. If a Person object is currently being edited, then that Person object
     // is removed before being replaced with the new one.
     
