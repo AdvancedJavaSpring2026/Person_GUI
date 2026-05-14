@@ -107,8 +107,8 @@ public class GUI extends JFrame implements ActionListener{
         fileMenu_save.addActionListener(e -> saveFile(false));
         fileMenu_saveAs.addActionListener(e -> saveFile(true));
         fileMenu_exit.addActionListener(e -> exitProgram());
-        helpMenu_help.addActionListener(this);
-        helpMenu_about.addActionListener(this);
+        helpMenu_help.addActionListener(e -> showHelpDialog());
+        helpMenu_about.addActionListener(e -> showAboutDialog());
     }
 
     private void setGUILayout(){
@@ -523,6 +523,43 @@ public class GUI extends JFrame implements ActionListener{
             this.dispose();
             System.exit(0);
         }
+    }
+    
+    private void showHelpDialog() { // Shows the user a JOptionPane to explain how to operate the program
+        String helpText = "<html><head><title>Help</title></head><body>"
+                + "<h3>Viewing Records</h3><ul><li>The combo box at the top of the window displays all currently loaded records.</li>"
+                + "<li>Select a person from the list to view their information in the fields below.</li></ul>"
+                + "<h3>Creating a New Person</h3><ol><li>Click <b>New Person</b>.</li>"
+                + "<li>Enter the person's information in the editable fields.</li>"
+                + "<li>Click <b>Store Person</b> to save the new record.</li>"
+                + "<li>Click <b>Cancel Editing</b> to discard changes.</li></ol>"
+                + "<h3>Editing an Existing Person</h3><ol><li>Select a person from the combo box.</li>"
+                + "<li>Click <b>Edit Person</b>.</li>"
+                + "<li>Modify the desired information.</li>"
+                + "<li>Click <b>Store Person</b> to save the changes.</li>"
+                + "<li>Click <b>Cancel Editing</b> to cancel without saving.</li></ol>"
+                + "<h3>Deleting a Person</h3><ol><li>Select the person you want to remove.</li>"
+                + "<li>Click <b>Delete Person</b>.</li>"
+                + "<li>Confirm the deletion if prompted.</li></ol>"
+                + "<h3>File Operations</h3><p>Use the <b>File</b> menu to:</p>"
+                + "<ul><li>Create a new file</li><li>Open an existing file</li><li>Save the current list of people</li>"
+                + "<li>Save data under a new file name</li><li>Exit the program</li></ul></body></html>";
+        JOptionPane.showMessageDialog(this, helpText, "Help", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    private void showAboutDialog() { // Shows the user a JOptionPane to tell the user about the progam
+        String aboutText = "<html><head><title>About Person GUI</title></head><body><h2>About Person GUI</h2><p>"
+                + "Person GUI is a program designed to manage objects within the Person<br>"
+                + "class hierarchy. Its implementation includes the use of Person,<br>"
+                + "RegisteredPerson, and OCCCPerson objects that utilize OCCCDate<br>"
+                + "objects as well as OCCCDateExceptions. Users can manage files<br>"
+                + "holding a list of Person objects to demonstrate the class hierarchy's<br>"
+                + "functionality.</p><h3>Credits</h3><ul>"
+                + "<li><b>Jamie Whitmarsh</b> - GUI design and implementation</li>"
+                + "<li><b>Veronica Edwards</b> - Person and OCCCDate hierarchy implementation</li>"
+                + "<li><b>Makayla Wood</b> - Program logic and operations</li>"
+                + "</ul></body></html>";
+        JOptionPane.showMessageDialog(this, aboutText, "About", JOptionPane.PLAIN_MESSAGE);
     }
 
 }
