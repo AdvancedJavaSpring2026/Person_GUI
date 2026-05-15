@@ -18,16 +18,13 @@ public class GUI extends JFrame implements ActionListener{
         "July", "August", "September", "October", "November", "December"};
 
     //Custom Colors
-    Color colorPurpleDark = new Color(132, 94, 194);
-    Color colorPurpleLight = new Color(214, 93, 177);
-    Color colorRedGentle = new Color(255, 111, 145);
-    Color colorOrangeDark = new Color(255, 150, 113);
-    Color colorOrangeLight = new Color(255, 199, 95);
-    Color colorYellow = new Color(249, 248, 113);
+    Color colorRosewood = new Color(99, 0, 3);
+    Color colorCream = new Color(249, 221, 177);
+
     
 
     //Fonts
-    Font mainFont = new Font("Times New Roman", Font.PLAIN, 14);
+    Font mainFont = new Font("Times New Roman", Font.PLAIN, 16);
 
     //Menu components
     JMenuItem fileMenu_new;
@@ -55,7 +52,7 @@ public class GUI extends JFrame implements ActionListener{
     //Data (this may wind up being in Victoria's work, and deleted here)
     String selectedPersonsText = " SELECTED PERSON INFORMATION";
     JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
-    JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel;
+    JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel, dropdownLabel;
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
     
     //Controller that handles logic operations
@@ -122,34 +119,36 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelContainer = new JPanel(new BorderLayout());
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        personDropdownPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        personDropdownPanel = new JPanel(new BorderLayout());
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel = new JPanel(new BorderLayout());
         personInfoPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(5,1)
         personTextFieldsPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 200));
-        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 50));
+        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
+        middlePanelTop.setPreferredSize(new Dimension(WIDTH, 100));
         middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 400));
         middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
         bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
-        personDropdownPanel.setPreferredSize(new Dimension(100, 50));
-        personButtonPanel.setPreferredSize(new Dimension(100, 40));
+        personDropdownPanel.setPreferredSize(new Dimension(100, 30));
+        personButtonPanel.setPreferredSize(new Dimension(100, 30));
         selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
         personTextFieldsPanel.setPreferredSize(new Dimension(100, 50));
         dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
 
-        fullScreenPanel.setBackground(colorOrangeLight);
-        topPanel.setBackground(colorRedGentle);
-        middlePanelTop.setBackground(colorOrangeDark);
-        middlePanelBottom.setBackground(colorYellow);
-        bottomPanel.setBackground(colorPurpleDark);
+        fullScreenPanel.setBackground(colorCream);
+        topPanel.setBackground(colorRosewood);
+        middlePanelTop.setBackground(colorRosewood);
+        middlePanelBottom.setBackground(colorCream);
+        bottomPanel.setBackground(colorRosewood);
 
-        personButtonPanel.setBackground(colorRedGentle);
-        personDropdownPanel.setBackground(colorRedGentle);
+        personButtonPanel.setBackground(colorCream);
+        personDropdownPanel.setBackground(colorCream);
+        personInfoPanel.setBackground(colorCream);
+        personTextFieldsPanel.setBackground(colorCream);
 
         // Forces the JComboBoxes to look normal even when disabled
         UIManager.put("ComboBox.disabledForeground", UIManager.getColor("ComboBox.foreground"));
@@ -158,6 +157,11 @@ public class GUI extends JFrame implements ActionListener{
 
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
+        dropdownLabel = new JLabel("List of available Persons");
+        Dimension comboBoxSize = new Dimension(personDropdown.getPreferredSize());
+        comboBoxSize.height = 15;
+        comboBoxSize.width = 200;
+        personDropdown.setPreferredSize(comboBoxSize);
 
         //Top right Panel holding Person buttons
         newPersonButton = new JButton("New Person");
@@ -165,7 +169,9 @@ public class GUI extends JFrame implements ActionListener{
         editPersonButton.setEnabled(false); // Edit button isn't available until a Person object is chosen from personDropdown
         deletePersonButton = new JButton("Delete Person");
 
-        personDropdownPanel.add(personDropdown);
+        personDropdownPanel.setBorder(BorderFactory.c(5,5,5,5));
+        personDropdownPanel.add(dropdownLabel, BorderLayout.CENTER);
+        personDropdownPanel.add(personDropdown, BorderLayout.SOUTH);
 
         personButtonPanel.add(newPersonButton);
         personButtonPanel.add(editPersonButton);
