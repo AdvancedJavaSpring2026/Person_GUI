@@ -12,8 +12,8 @@ public class GUI extends JFrame implements ActionListener{
     //NOTE FROM JAMIE - WE CAN MOVE ANY OR ALL ACTIONLISTENER THINGS OUT OF HERE IF NEEDED
 
 
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 1024;
+    private static final int WIDTH = 720;
+    private static final int HEIGHT = 720;
     private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
         "July", "August", "September", "October", "November", "December"};
 
