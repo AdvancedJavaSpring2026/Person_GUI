@@ -43,7 +43,7 @@ public class GUI extends JFrame implements ActionListener{
             field1, field2, field3, field4, label1, label2, label3, label4, label5, date1, date2, date3;
 
     //Components that do things
-    JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton;
+    JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton, cancelButton;
     JComboBox<Person> personDropdown;
     JComboBox<String> monthDropdown;
     JComboBox<Integer> dayDropdown;
@@ -99,7 +99,8 @@ public class GUI extends JFrame implements ActionListener{
         personDropdown.addActionListener(e -> personDropdownAction());
         monthDropdown.addActionListener(e -> refreshDayComboBox());
         yearDropdown.addActionListener(e -> refreshDayComboBox());
-        
+        cancelButton.addActionListener(e -> cancelEditing());
+
         fileMenu_new.addActionListener(e -> startNewFile());
         fileMenu_open.addActionListener(e -> loadFile());
         fileMenu_save.addActionListener(e -> saveFile(false));
@@ -132,7 +133,7 @@ public class GUI extends JFrame implements ActionListener{
         middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
         bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
-        personDropdownPanel.setPreferredSize(new Dimension(100, 30));
+        personDropdownPanel.setPreferredSize(new Dimension(75, 30));
         personButtonPanel.setPreferredSize(new Dimension(100, 50));
         selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
@@ -161,7 +162,7 @@ public class GUI extends JFrame implements ActionListener{
         dropdownLabel.setFont(mainFontBold);
         Dimension comboBoxSize = new Dimension(personDropdown.getPreferredSize());
         comboBoxSize.height = 20;
-        comboBoxSize.width = 200;
+        comboBoxSize.width = 75;
         personDropdown.setPreferredSize(comboBoxSize);
 
         //Top right Panel holding Person buttons
@@ -230,10 +231,10 @@ public class GUI extends JFrame implements ActionListener{
 
         //Middle right Panel holding Person fields
 
-        firstNameField = new JTextField(30);
-        lastNameField = new JTextField(30);
-        govIDField = new JTextField(30);
-        studentIDField = new JTextField(30);
+        firstNameField = new JTextField(20);
+        lastNameField = new JTextField(20);
+        govIDField = new JTextField(20);
+        studentIDField = new JTextField(20);
 
         field1 = new JPanel();
         field2 = new JPanel();
@@ -293,9 +294,12 @@ public class GUI extends JFrame implements ActionListener{
         storePersonButton = new JButton("Store Person");
         storePersonButton.setEnabled(false); // Store button not enabled until user enters editing mode
 
+        cancelButton = new JButton("Cancel");
+
         newPersonButton.setFont(mainFontLight);
         editPersonButton.setFont(mainFontLight);
         deletePersonButton.setFont(mainFontLight);
+        cancelButton.setFont(mainFontLight);
 
         selectedPersonLabel.setFont(mainFontBold);
 
@@ -320,6 +324,7 @@ public class GUI extends JFrame implements ActionListener{
 
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         bottomPanel.add(storePersonButton);
+        bottomPanel.add(cancelButton);
 
         fullScreenPanel.setLayout(new BorderLayout());
 
