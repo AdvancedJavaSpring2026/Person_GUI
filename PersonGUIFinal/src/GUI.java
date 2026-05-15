@@ -40,7 +40,7 @@ public class GUI extends JFrame implements ActionListener{
     //Layout components
     JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, middlePanelContainer, bottomPanel, personDropdownPanel,
             personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel,
-            field1, field2, field3, field4, field5, label1, label2, label3, label4, label5;
+            field1, field2, field3, field4, label1, label2, label3, label4, label5, date1, date2, date3;
 
     //Components that do things
     JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton;
@@ -137,7 +137,7 @@ public class GUI extends JFrame implements ActionListener{
         selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
         personTextFieldsPanel.setPreferredSize(new Dimension(100, 50));
-        dateDropdownsPanel.setPreferredSize(new Dimension(100, 100));
+        dateDropdownsPanel.setPreferredSize(new Dimension(200, 100));
 
         fullScreenPanel.setBackground(colorCream);
         topPanel.setBackground(colorRosewood);
@@ -214,11 +214,11 @@ public class GUI extends JFrame implements ActionListener{
         label4.setBackground(colorCream);
         label5.setBackground(colorCream);
 
-        label1.setPreferredSize(new Dimension(50, 15));
-        label2.setPreferredSize(new Dimension(50, 15));
-        label3.setPreferredSize(new Dimension(50, 15));
-        label4.setPreferredSize(new Dimension(50, 15));
-        label5.setPreferredSize(new Dimension(50, 15));
+        label1.setPreferredSize(new Dimension(50, 10));
+        label2.setPreferredSize(new Dimension(50, 10));
+        label3.setPreferredSize(new Dimension(50, 10));
+        label4.setPreferredSize(new Dimension(50, 10));
+        label5.setPreferredSize(new Dimension(50, 10));
 
         personInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 0));
         personInfoPanel.add(label1);
@@ -239,7 +239,6 @@ public class GUI extends JFrame implements ActionListener{
         field2 = new JPanel();
         field3 = new JPanel();
         field4 = new JPanel();
-        field5 = new JPanel();
 
         field1.add(firstNameField);
         field2.add(lastNameField);
@@ -251,11 +250,10 @@ public class GUI extends JFrame implements ActionListener{
         field3.setBackground(colorCream);
         field4.setBackground(colorCream);
 
-        field1.setPreferredSize(new Dimension(50, 15));
-        field2.setPreferredSize(new Dimension(50, 15));
-        field3.setPreferredSize(new Dimension(50, 15));
-        field4.setPreferredSize(new Dimension(50, 15));
-        field5.setPreferredSize(new Dimension(50, 15));
+        field1.setPreferredSize(new Dimension(50, 10));
+        field2.setPreferredSize(new Dimension(50, 10));
+        field3.setPreferredSize(new Dimension(50, 10));
+        field4.setPreferredSize(new Dimension(50, 10));
 
         personTextFieldsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
         personTextFieldsPanel.add(field1);
@@ -268,24 +266,26 @@ public class GUI extends JFrame implements ActionListener{
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
 
-        comboBoxSize = new Dimension(monthDropdown.getPreferredSize());
-        comboBoxSize.height = 15;
-        comboBoxSize.width = 50;
-        monthDropdown.setPreferredSize(comboBoxSize);
+        date1 = new JPanel();
+        date2 = new JPanel();
+        date3 = new JPanel();
 
-        comboBoxSize = new Dimension(dayDropdown.getPreferredSize());
-        comboBoxSize.height = 15;
-        comboBoxSize.width = 50;
-        dayDropdown.setPreferredSize(comboBoxSize);
+        date1.setBackground(colorCream);
+        date2.setBackground(colorCream);
+        date3.setBackground(colorCream);
 
-        comboBoxSize = new Dimension(yearDropdown.getPreferredSize());
-        comboBoxSize.height = 15;
+        date1.setPreferredSize(new Dimension(50, 10));
+        date2.setPreferredSize(new Dimension(250, 10));
+        date3.setPreferredSize(new Dimension(125, 10));
 
-        yearDropdown.setPreferredSize(comboBoxSize);
+        date2.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        date1.add(dayDropdown);
+        date2.add(monthDropdown);
+        date3.add(yearDropdown);
 
-        dateDropdownsPanel.add(dayDropdown, BorderLayout.LINE_START);
-        dateDropdownsPanel.add(monthDropdown, BorderLayout.CENTER);
-        dateDropdownsPanel.add(yearDropdown, BorderLayout.LINE_END);
+        dateDropdownsPanel.add(date1, BorderLayout.LINE_START);
+        dateDropdownsPanel.add(date2, BorderLayout.CENTER);
+        dateDropdownsPanel.add(date3, BorderLayout.LINE_END);
 
         personTextFieldsPanel.add(dateDropdownsPanel);
 
