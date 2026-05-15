@@ -1,3 +1,37 @@
+<<<<<<< HEAD
+public class OCCCPerson extends RegisteredPerson {
+
+    private String studentID;
+
+    public OCCCPerson(String firstName,
+                      String lastName,
+                      OCCCDate dob,
+                      String governmentID,
+                      String studentID) {
+
+        super(firstName,
+              lastName,
+              dob,
+              governmentID);
+
+        this.studentID = studentID;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                " (OCCC)";
+    }
+}
+=======
 // Makayla Wood
 // Advanced Java
 // Spring 2026
@@ -57,3 +91,4 @@ public class OCCCPerson extends RegisteredPerson implements Serializable
         return super.toString() + " {" + this.studentID + "}";
     }
 }
+>>>>>>> 422380744cf5622e6b9032bd618835605c13dc76

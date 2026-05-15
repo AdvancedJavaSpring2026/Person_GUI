@@ -1,3 +1,33 @@
+<<<<<<< HEAD
+public class RegisteredPerson extends Person {
+
+    private String governmentID;
+
+    public RegisteredPerson(String firstName,
+                            String lastName,
+                            OCCCDate dob,
+                            String governmentID) {
+
+        super(firstName, lastName, dob);
+
+        this.governmentID = governmentID;
+    }
+
+    public String getGovernmentID() {
+        return governmentID;
+    }
+
+    public void setGovernmentID(String governmentID) {
+        this.governmentID = governmentID;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                " (Registered)";
+    }
+}
+=======
 // Makayla Wood
 // Advanced Java
 // Spring 2026
@@ -62,3 +92,4 @@ public class RegisteredPerson extends Person implements Serializable
         return super.toString() + " [" + this.govID + "]";
     }
 }
+>>>>>>> 422380744cf5622e6b9032bd618835605c13dc76

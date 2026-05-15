@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 public class Controller {
     
     private boolean fileIsDirty; // Keeps track of whether there is unsaved data
+    private boolean editingPerson; // Keeps track of if a person is in the middle of being edited
+    private Person oldPerson; // Holder for Person object being edited
     private ArrayList<Person> personList; // Keeps the list of all the People objects
     private File currentFile; // Keeps track of the current working file
     
@@ -57,8 +59,8 @@ public class Controller {
             int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
             if (returnVal == JOptionPane.YES_OPTION)
                 save();
-            else if (returnVal == JOptionPane.CANCEL_OPTION)
-                return 0;
+            else if (returnVal == JOptionPane.CANCEL_OPTION || returnVal == JOptionPane.CLOSED_OPTION)
+                return 1;
         }
         // Gets the file from the user and loads it into the program
         JFileChooser chooser = new JFileChooser();
@@ -90,18 +92,61 @@ public class Controller {
         return returnVal;
     }
     
-    public int startNewFile() {
-        // Will prompt the user if there is any unsaved data and reset variables to default/empty states
-        return -1;
+    public int startNewFile() { // Checks for unsaved data and then resets fields to their default states
+        if (checkUnsavedData()) {
+            personList = new ArrayList<>();
+            currentFile = null;
+            fileIsDirty = false;
+            return 0;
+        }
+        else
+            return 1;
     }
     
+    public boolean checkUnsavedData() { // Prompts the user for how to handle unsaved data if it exists; Returns true to continue operation or false to cancel
+        if (fileIsDirty) { // Prompts the user to save, not save, or cancel loading a new file if unsaved data exists
+            int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (returnVal == JOptionPane.YES_OPTION) {
+                switch (save()) {
+                    case 0: return true;
+                    
+                    case 1: return false;
+                    
+                    case -1: return false;
+                    
+                    default: return false;
+                }
+            }
+            else if (returnVal == JOptionPane.NO_OPTION) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else
+            return true;
+    }
+    
+    // Each addPersonToList function creates a new Person object whose type is based on the provided information
+    // and adds it to personList. If a Person object is currently being edited, then that Person object
+    // is removed before being replaced with the new one.
+    
     public void addPersonToList(String firstName, String lastName, OCCCDate dob){
+        if (editingPerson && oldPerson != null) {
+            personList.remove(oldPerson);
+            stopEditingPerson();
+        }
         Person p = new Person(firstName, lastName, dob);
         personList.add(p);
         fileIsDirty = true;
     }
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob, String govID){
+        if (editingPerson && oldPerson != null) {
+            personList.remove(oldPerson);
+            stopEditingPerson();
+        }
         RegisteredPerson r = new RegisteredPerson(firstName, lastName, dob, govID);
         personList.add(r);
         fileIsDirty = true;
@@ -109,6 +154,10 @@ public class Controller {
     
     public void addPersonToList(String firstName, String lastName, OCCCDate dob,
             String govID, String studentID){
+        if (editingPerson && oldPerson != null) {
+            personList.remove(oldPerson);
+            stopEditingPerson();
+        }
         OCCCPerson o = new OCCCPerson(new RegisteredPerson(firstName, lastName, dob, govID), studentID);
         personList.add(o);
         fileIsDirty = true;
@@ -124,7 +173,17 @@ public class Controller {
     }
     
     public boolean currentFileExists() {
-        return currentFile == null;
+        return currentFile != null;
+    }
+    
+    public void startEditingPerson(Person p) {
+        editingPerson = true;
+        oldPerson = p;
+    }
+    
+    public void stopEditingPerson() {
+        editingPerson = false;
+        oldPerson = null;
     }
     
     public static int getNumberOfDaysInMonth(int month, int year){
@@ -139,18 +198,10 @@ public class Controller {
             
         else if (month == 2)
         {
-            if (year % 4 > 0)
-                numDays = 28;
-            
-            else if (year % 100 == 0)
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
                 numDays = 29;
-            
-            else if (year % 400 > 0)
-                numDays = 28;
-            
             else
-                numDays = 29;
-            
+                numDays = 28;
         }
         else
             throw new IllegalArgumentException("int month must be between 1 and 12");
