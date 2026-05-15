@@ -158,7 +158,7 @@ public class Controller {
             personList.remove(oldPerson);
             stopEditingPerson();
         }
-        OCCCPerson o = new OCCCPerson(new RegisteredPerson(firstName, lastName, dob, govID), studentID);
+        OCCCPerson o = new OCCCPerson(firstName, lastName, dob, govID, studentID);
         personList.add(o);
         fileIsDirty = true;
     }

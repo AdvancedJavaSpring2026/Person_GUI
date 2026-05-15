@@ -399,7 +399,7 @@ public class GUI extends JFrame implements ActionListener{
         else {
             if (personDropdown.getSelectedItem().getClass().equals(Person.class)) {
                 Person p = (Person)personDropdown.getSelectedItem();
-                OCCCDate dob = p.getDOB();
+                OCCCDate dob = p.getDateOfBirth();
                 selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
@@ -412,7 +412,7 @@ public class GUI extends JFrame implements ActionListener{
             }
             else if (personDropdown.getSelectedItem().getClass().equals(RegisteredPerson.class)) {
                 RegisteredPerson p = (RegisteredPerson)personDropdown.getSelectedItem();
-                OCCCDate dob = p.getDOB();
+                OCCCDate dob = p.getDateOfBirth();
                 selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
@@ -425,7 +425,7 @@ public class GUI extends JFrame implements ActionListener{
             }
             else if (personDropdown.getSelectedItem().getClass().equals(OCCCPerson.class)) {
                 OCCCPerson p = (OCCCPerson)personDropdown.getSelectedItem();
-                OCCCDate dob = p.getDOB();
+                OCCCDate dob = p.getDateOfBirth();
                 selectedPersonLabel.setText(p.getFirstName().toUpperCase() + " " + p.getLastName().toUpperCase());
                 firstNameField.setText(p.getFirstName());
                 lastNameField.setText(p.getLastName());
