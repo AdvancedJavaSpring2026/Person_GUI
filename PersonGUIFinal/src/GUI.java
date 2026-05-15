@@ -51,7 +51,7 @@ public class GUI extends JFrame implements ActionListener{
 
     //Data (this may wind up being in Victoria's work, and deleted here)
     String selectedPersonsText = " SELECTED PERSON INFORMATION";
-    JLabel selectedPersonLabel = new JLabel(selectedPersonsText);
+    JLabel selectedPersonLabel;
     JLabel firstNameLabel, lastNameLabel, govIDLabel, studentIDLabel, dobLabel, dropdownLabel;
     JTextField firstNameField, lastNameField, govIDField, studentIDField;
     
@@ -157,7 +157,7 @@ public class GUI extends JFrame implements ActionListener{
 
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
-        dropdownLabel = new JLabel("List of available Persons");
+        dropdownLabel = new JLabel("List of available Persons", SwingConstants.CENTER);
         Dimension comboBoxSize = new Dimension(personDropdown.getPreferredSize());
         comboBoxSize.height = 15;
         comboBoxSize.width = 200;
@@ -169,7 +169,7 @@ public class GUI extends JFrame implements ActionListener{
         editPersonButton.setEnabled(false); // Edit button isn't available until a Person object is chosen from personDropdown
         deletePersonButton = new JButton("Delete Person");
 
-        personDropdownPanel.setBorder(BorderFactory.c(5,5,5,5));
+        personDropdownPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         personDropdownPanel.add(dropdownLabel, BorderLayout.CENTER);
         personDropdownPanel.add(personDropdown, BorderLayout.SOUTH);
 
@@ -180,8 +180,7 @@ public class GUI extends JFrame implements ActionListener{
         topPanel.add(personDropdownPanel);
         topPanel.add(personButtonPanel);
 
-        selectedPersonLabel.setVerticalTextPosition(SwingConstants.CENTER);
-        selectedPersonLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        selectedPersonLabel = new JLabel(selectedPersonsText, SwingConstants.CENTER);
         selectedPersonPanel.add(selectedPersonLabel, BorderLayout.CENTER);
         middlePanelTop.add(selectedPersonPanel);
 
