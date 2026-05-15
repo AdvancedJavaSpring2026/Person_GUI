@@ -24,7 +24,8 @@ public class GUI extends JFrame implements ActionListener{
     
 
     //Fonts
-    Font mainFont = new Font("Times New Roman", Font.PLAIN, 16);
+    Font mainFontBold = new Font("Times New Roman", Font.BOLD, 16);
+    Font mainFontLight = new Font("Times New Roman", Font.PLAIN, 16);
 
     //Menu components
     JMenuItem fileMenu_new;
@@ -38,9 +39,8 @@ public class GUI extends JFrame implements ActionListener{
 
     //Layout components
     JPanel fullScreenPanel, topPanel, middlePanelTop, middlePanelBottom, middlePanelContainer, bottomPanel, personDropdownPanel,
-            personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel;
-    GridBagLayout gridBagLayout;
-    GridBagConstraints topPanConstraints, bottomPanConstraints;
+            personButtonPanel, personTextFieldsPanel, selectedPersonPanel, personInfoPanel, dateDropdownsPanel,
+            field1, field2, field3, field4, field5, label1, label2, label3, label4, label5;
 
     //Components that do things
     JButton newPersonButton, editPersonButton, deletePersonButton, storePersonButton;
@@ -123,17 +123,17 @@ public class GUI extends JFrame implements ActionListener{
         personButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         selectedPersonPanel = new JPanel(new BorderLayout());
         personInfoPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(5,1)
-        personTextFieldsPanel = new JPanel(new GridLayout(5, 1, 0, 15));//new GridLayout(4,1)
+        personTextFieldsPanel = new JPanel(new GridLayout(5, 1, 0, 20));//new GridLayout(4,1)
         dateDropdownsPanel = new JPanel(new BorderLayout());
 
-        topPanel.setPreferredSize(new Dimension(WIDTH, 50));
+        topPanel.setPreferredSize(new Dimension(WIDTH, 70));
         middlePanelTop.setPreferredSize(new Dimension(WIDTH, 100));
         middlePanelBottom.setPreferredSize(new Dimension(WIDTH, 400));
         middlePanelContainer.setPreferredSize(new Dimension(WIDTH, 750));
         bottomPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
         personDropdownPanel.setPreferredSize(new Dimension(100, 30));
-        personButtonPanel.setPreferredSize(new Dimension(100, 30));
+        personButtonPanel.setPreferredSize(new Dimension(100, 50));
         selectedPersonPanel.setPreferredSize(new Dimension(300, 50));
         personInfoPanel.setPreferredSize(new Dimension(200, 200));
         personTextFieldsPanel.setPreferredSize(new Dimension(100, 50));
@@ -158,8 +158,9 @@ public class GUI extends JFrame implements ActionListener{
         //Top left Panel holding Person Dropdown Box
         personDropdown = new JComboBox<>();
         dropdownLabel = new JLabel("List of available Persons", SwingConstants.CENTER);
+        dropdownLabel.setFont(mainFontBold);
         Dimension comboBoxSize = new Dimension(personDropdown.getPreferredSize());
-        comboBoxSize.height = 15;
+        comboBoxSize.height = 20;
         comboBoxSize.width = 200;
         personDropdown.setPreferredSize(comboBoxSize);
 
@@ -169,9 +170,11 @@ public class GUI extends JFrame implements ActionListener{
         editPersonButton.setEnabled(false); // Edit button isn't available until a Person object is chosen from personDropdown
         deletePersonButton = new JButton("Delete Person");
 
-        personDropdownPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        personDropdownPanel.setBorder(BorderFactory.createEmptyBorder(5,5,15,5));
         personDropdownPanel.add(dropdownLabel, BorderLayout.CENTER);
         personDropdownPanel.add(personDropdown, BorderLayout.SOUTH);
+
+        personButtonPanel.setBorder(BorderFactory.createEmptyBorder(15,0,15,0));
 
         personButtonPanel.add(newPersonButton);
         personButtonPanel.add(editPersonButton);
@@ -182,6 +185,7 @@ public class GUI extends JFrame implements ActionListener{
 
         selectedPersonLabel = new JLabel(selectedPersonsText, SwingConstants.CENTER);
         selectedPersonPanel.add(selectedPersonLabel, BorderLayout.CENTER);
+        middlePanelTop.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         middlePanelTop.add(selectedPersonPanel);
 
         //Middle left Panel holding Person info text ("First Name: ", etc.)
@@ -192,29 +196,92 @@ public class GUI extends JFrame implements ActionListener{
         studentIDLabel = new JLabel("Student ID: ");
         dobLabel = new JLabel("Date of Birth: ");
 
-        personInfoPanel.add(firstNameLabel);
-        personInfoPanel.add(lastNameLabel);
-        personInfoPanel.add(govIDLabel);
-        personInfoPanel.add(studentIDLabel);
-        personInfoPanel.add(dobLabel);
+        label1 = new JPanel();
+        label2 = new JPanel();
+        label3 = new JPanel();
+        label4 = new JPanel();
+        label5 = new JPanel();
+
+        label1.add(firstNameLabel);
+        label2.add(lastNameLabel);
+        label3.add(govIDLabel);
+        label4.add(studentIDLabel);
+        label5.add(dobLabel);
+
+        label1.setBackground(colorCream);
+        label2.setBackground(colorCream);
+        label3.setBackground(colorCream);
+        label4.setBackground(colorCream);
+        label5.setBackground(colorCream);
+
+        label1.setPreferredSize(new Dimension(50, 15));
+        label2.setPreferredSize(new Dimension(50, 15));
+        label3.setPreferredSize(new Dimension(50, 15));
+        label4.setPreferredSize(new Dimension(50, 15));
+        label5.setPreferredSize(new Dimension(50, 15));
+
+        personInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 0));
+        personInfoPanel.add(label1);
+        personInfoPanel.add(label2);
+        personInfoPanel.add(label3);
+        personInfoPanel.add(label4);
+        personInfoPanel.add(label5);
 
 
         //Middle right Panel holding Person fields
 
-        firstNameField = new JTextField(15);
-        lastNameField = new JTextField(15);
-        govIDField = new JTextField(15);
-        studentIDField = new JTextField(15);
+        firstNameField = new JTextField(30);
+        lastNameField = new JTextField(30);
+        govIDField = new JTextField(30);
+        studentIDField = new JTextField(30);
 
-        personTextFieldsPanel.add(firstNameField);
-        personTextFieldsPanel.add(lastNameField);
-        personTextFieldsPanel.add(govIDField);
-        personTextFieldsPanel.add(studentIDField);
+        field1 = new JPanel();
+        field2 = new JPanel();
+        field3 = new JPanel();
+        field4 = new JPanel();
+        field5 = new JPanel();
+
+        field1.add(firstNameField);
+        field2.add(lastNameField);
+        field3.add(govIDField);
+        field4.add(studentIDField);
+
+        field1.setBackground(colorCream);
+        field2.setBackground(colorCream);
+        field3.setBackground(colorCream);
+        field4.setBackground(colorCream);
+
+        field1.setPreferredSize(new Dimension(50, 15));
+        field2.setPreferredSize(new Dimension(50, 15));
+        field3.setPreferredSize(new Dimension(50, 15));
+        field4.setPreferredSize(new Dimension(50, 15));
+        field5.setPreferredSize(new Dimension(50, 15));
+
+        personTextFieldsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
+        personTextFieldsPanel.add(field1);
+        personTextFieldsPanel.add(field2);
+        personTextFieldsPanel.add(field3);
+        personTextFieldsPanel.add(field4);
 
         //Bottom right Panel holding date dropdowns
         monthDropdown = new JComboBox<>(MONTHS);
         dayDropdown = new JComboBox<>();
         yearDropdown = new JComboBox<>();
+
+        comboBoxSize = new Dimension(monthDropdown.getPreferredSize());
+        comboBoxSize.height = 15;
+        comboBoxSize.width = 50;
+        monthDropdown.setPreferredSize(comboBoxSize);
+
+        comboBoxSize = new Dimension(dayDropdown.getPreferredSize());
+        comboBoxSize.height = 15;
+        comboBoxSize.width = 50;
+        dayDropdown.setPreferredSize(comboBoxSize);
+
+        comboBoxSize = new Dimension(yearDropdown.getPreferredSize());
+        comboBoxSize.height = 15;
+
+        yearDropdown.setPreferredSize(comboBoxSize);
 
         dateDropdownsPanel.add(dayDropdown, BorderLayout.LINE_START);
         dateDropdownsPanel.add(monthDropdown, BorderLayout.CENTER);
@@ -226,35 +293,32 @@ public class GUI extends JFrame implements ActionListener{
         storePersonButton = new JButton("Store Person");
         storePersonButton.setEnabled(false); // Store button not enabled until user enters editing mode
 
-        newPersonButton.setFont(mainFont);
-        editPersonButton.setFont(mainFont);
-        deletePersonButton.setFont(mainFont);
+        newPersonButton.setFont(mainFontLight);
+        editPersonButton.setFont(mainFontLight);
+        deletePersonButton.setFont(mainFontLight);
 
-        selectedPersonLabel.setFont(mainFont);
+        selectedPersonLabel.setFont(mainFontBold);
 
-        firstNameLabel.setFont(mainFont);
-        lastNameLabel.setFont(mainFont);
-        govIDLabel.setFont(mainFont);
-        studentIDLabel.setFont(mainFont);
-        dobLabel.setFont(mainFont);
+        firstNameLabel.setFont(mainFontBold);
+        lastNameLabel.setFont(mainFontBold);
+        govIDLabel.setFont(mainFontBold);
+        studentIDLabel.setFont(mainFontBold);
+        dobLabel.setFont(mainFontBold);
 
-        monthDropdown.setFont(mainFont);
-        dayDropdown.setFont(mainFont);
-        yearDropdown.setFont(mainFont);
+        monthDropdown.setFont(mainFontBold);
+        dayDropdown.setFont(mainFontBold);
+        yearDropdown.setFont(mainFontBold);
 
-        storePersonButton.setFont(mainFont);
+        storePersonButton.setFont(mainFontBold);
 
-        //topPanel.add(personDropdownPanel);
-        //topPanel.add(personButtonPanel);
-
-        //middlePanelTop.add(selectedPersonPanel);
-
+        middlePanelBottom.setBorder(BorderFactory.createEmptyBorder(25, 10, 25, 10));
         middlePanelBottom.add(personInfoPanel);
         middlePanelBottom.add(personTextFieldsPanel);
 
         middlePanelContainer.add(middlePanelTop, BorderLayout.NORTH);
         middlePanelContainer.add(middlePanelBottom, BorderLayout.CENTER);
 
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         bottomPanel.add(storePersonButton);
 
         fullScreenPanel.setLayout(new BorderLayout());
