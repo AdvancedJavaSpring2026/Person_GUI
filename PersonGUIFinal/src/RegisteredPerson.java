@@ -23,6 +23,6 @@ public class RegisteredPerson extends Person {
     @Override
     public String toString() {
         return super.toString() +
-                " (Registered)";
+                " [" + governmentID + "]";
     }
 }

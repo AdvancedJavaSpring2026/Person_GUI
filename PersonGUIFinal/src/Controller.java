@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
@@ -19,15 +20,17 @@ public class Controller {
     private Person oldPerson; // Holder for Person object being edited
     private ArrayList<Person> personList; // Keeps the list of all the People objects
     private File currentFile; // Keeps track of the current working file
+    private JFrame masterFrame; // Holds the GUI so that dialogs are properly centered with the frame
     
-    public Controller(){
+    public Controller(JFrame masterFrame){
         fileIsDirty = false;
         personList = new ArrayList();
+        this.masterFrame = masterFrame;
     }
     
     public int saveAsNew(){ // Returns 0 if the file was saved correctly, 1 if the operation was cancelled, and -1 if an exception was thrown by JFileChooser
         JFileChooser chooser = new JFileChooser();
-        int returnVal = chooser.showSaveDialog(null); // Prompts the user to choose a file directory
+        int returnVal = chooser.showSaveDialog(masterFrame); // Prompts the user to choose a file directory
         if (returnVal == JFileChooser.APPROVE_OPTION) 
             currentFile = chooser.getSelectedFile(); // gets the directory from the user
         else
@@ -56,7 +59,7 @@ public class Controller {
     
     public int loadPeopleFile(){ // Loads the file into personList. Returns 0 for successful loading, 1 for cancel and -1 for an error
         if (fileIsDirty) { // Prompts the user to save, not save, or cancel loading a new file if unsaved data exists
-            int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
+            int returnVal = JOptionPane.showConfirmDialog(masterFrame, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
             if (returnVal == JOptionPane.YES_OPTION)
                 save();
             else if (returnVal == JOptionPane.CANCEL_OPTION || returnVal == JOptionPane.CLOSED_OPTION)
@@ -64,7 +67,7 @@ public class Controller {
         }
         // Gets the file from the user and loads it into the program
         JFileChooser chooser = new JFileChooser();
-        int returnVal = chooser.showOpenDialog(null);
+        int returnVal = chooser.showOpenDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try{
                     File file = chooser.getSelectedFile();
@@ -105,7 +108,7 @@ public class Controller {
     
     public boolean checkUnsavedData() { // Prompts the user for how to handle unsaved data if it exists; Returns true to continue operation or false to cancel
         if (fileIsDirty) { // Prompts the user to save, not save, or cancel loading a new file if unsaved data exists
-            int returnVal = JOptionPane.showConfirmDialog(null, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
+            int returnVal = JOptionPane.showConfirmDialog(masterFrame, "You have unsaved data. Would you like to save before continuing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
             if (returnVal == JOptionPane.YES_OPTION) {
                 switch (save()) {
                     case 0: return true;

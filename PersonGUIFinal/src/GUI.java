@@ -8,11 +8,8 @@ import java.util.Comparator;
 import javax.swing.*;
 
 public class GUI extends JFrame implements ActionListener{
-
-    //NOTE FROM JAMIE - WE CAN MOVE ANY OR ALL ACTIONLISTENER THINGS OUT OF HERE IF NEEDED
-
-
-    private static final int WIDTH = 720;
+    
+    private static final int WIDTH = 750;
     private static final int HEIGHT = 720;
     private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
         "July", "August", "September", "October", "November", "December"};
@@ -62,7 +59,7 @@ public class GUI extends JFrame implements ActionListener{
     public GUI(){
         super("Person GUI App - Makayla, Victoria, Jamie");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        controller = new Controller();
+        controller = new Controller(this);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -295,6 +292,7 @@ public class GUI extends JFrame implements ActionListener{
         storePersonButton.setEnabled(false); // Store button not enabled until user enters editing mode
 
         cancelButton = new JButton("Cancel");
+        cancelButton.setEnabled(false); // Cancel button not enabled until user enters editing mode
 
         newPersonButton.setFont(mainFontLight);
         editPersonButton.setFont(mainFontLight);
@@ -314,6 +312,7 @@ public class GUI extends JFrame implements ActionListener{
         yearDropdown.setFont(mainFontBold);
 
         storePersonButton.setFont(mainFontBold);
+        cancelButton.setFont(mainFontBold);
 
         middlePanelBottom.setBorder(BorderFactory.createEmptyBorder(25, 10, 25, 10));
         middlePanelBottom.add(personInfoPanel);
@@ -515,10 +514,14 @@ public class GUI extends JFrame implements ActionListener{
     
     private void refreshDayComboBox() { // Gets the current number of days in the month and refreshs the day combo box
         int numDays = Controller.getNumberOfDaysInMonth(monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem());
+        int currentIndex = dayDropdown.getSelectedIndex();
         dayDropdown.removeAllItems();
         for (int i = 1; i <= numDays; i++)
             dayDropdown.addItem(i);
-        dayDropdown.setSelectedIndex(0);
+        if (currentIndex < dayDropdown.getItemCount() && currentIndex >=0)
+            dayDropdown.setSelectedIndex(currentIndex);
+        else
+            dayDropdown.setSelectedIndex(0);
     }
     
     private void openInputFields(boolean forNewPerson) { // Opens all the input fields to create a new Person object
@@ -549,6 +552,7 @@ public class GUI extends JFrame implements ActionListener{
         editPersonButton.setEnabled(false);
         deletePersonButton.setEnabled(false);
         storePersonButton.setEnabled(true);
+        cancelButton.setEnabled(true);
     }
     
     private void closeInputFields() { // Closes all the input fields when Person object creation is finished
@@ -569,6 +573,7 @@ public class GUI extends JFrame implements ActionListener{
         newPersonButton.setEnabled(true);
         deletePersonButton.setEnabled(true);
         storePersonButton.setEnabled(false);
+        cancelButton.setEnabled(false);
         if (personDropdown.getSelectedIndex() != -1)
             editPersonButton.setEnabled(true);
     }

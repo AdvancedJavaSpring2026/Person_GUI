@@ -27,6 +27,6 @@ public class OCCCPerson extends RegisteredPerson {
     @Override
     public String toString() {
         return super.toString() +
-                " (OCCC)";
+                " (" + studentID + ")";
     }
 }
