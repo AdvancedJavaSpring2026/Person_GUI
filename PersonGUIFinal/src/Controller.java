@@ -135,7 +135,7 @@ public class Controller {
     // and adds it to personList. If a Person object is currently being edited, then that Person object
     // is removed before being replaced with the new one.
     
-    public void addPersonToList(String firstName, String lastName, OCCCDate dob){
+    public Person addPersonToList(String firstName, String lastName, OCCCDate dob){
         if (editingPerson && oldPerson != null) {
             personList.remove(oldPerson);
             stopEditingPerson();
@@ -143,9 +143,10 @@ public class Controller {
         Person p = new Person(firstName, lastName, dob);
         personList.add(p);
         fileIsDirty = true;
+        return p;
     }
     
-    public void addPersonToList(String firstName, String lastName, OCCCDate dob, String govID){
+    public Person addPersonToList(String firstName, String lastName, OCCCDate dob, String govID){
         if (editingPerson && oldPerson != null) {
             personList.remove(oldPerson);
             stopEditingPerson();
@@ -153,9 +154,10 @@ public class Controller {
         RegisteredPerson r = new RegisteredPerson(firstName, lastName, dob, govID);
         personList.add(r);
         fileIsDirty = true;
+        return r;
     }
     
-    public void addPersonToList(String firstName, String lastName, OCCCDate dob,
+    public Person addPersonToList(String firstName, String lastName, OCCCDate dob,
             String govID, String studentID){
         if (editingPerson && oldPerson != null) {
             personList.remove(oldPerson);
@@ -164,6 +166,7 @@ public class Controller {
         OCCCPerson o = new OCCCPerson(firstName, lastName, dob, govID, studentID);
         personList.add(o);
         fileIsDirty = true;
+        return o;
     }
     
     public void removePersonFromList(Person person) {

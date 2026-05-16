@@ -402,23 +402,24 @@ public class GUI extends JFrame implements ActionListener{
         // Determines what kind of Person object to make and calls the controller to add it to the list with the data provided in each field
         else {
             try {
+                Person p = null;
                 if (!govIDField.getText().isBlank()) {
                     if (!studentIDField.getText().isBlank()) {
-                        controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                        p = controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
                                 new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()), 
                                 govIDField.getText(), studentIDField.getText());
                     }
                     else {
-                        controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                        p = controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
                                 new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()), 
                                 govIDField.getText());
                     }
                 }
                 else {
-                    controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
+                    p = controller.addPersonToList(firstNameField.getText(), lastNameField.getText(), 
                                 new OCCCDate((int)dayDropdown.getSelectedItem(), monthDropdown.getSelectedIndex() + 1, (int)yearDropdown.getSelectedItem()));
                 }
-                refreshPersonComboBox(); // Ensures that the newly added Person is displayed to the user
+                refreshPersonComboBox(p); // Ensures that the newly added Person is displayed to the user
             } catch (InvalidOCCCDateException ex) {
                 JOptionPane.showMessageDialog(this, ex.toString(), "Error", JOptionPane.ERROR_MESSAGE); // Throws error message if OCCCDate throws and exception
             }
@@ -445,17 +446,21 @@ public class GUI extends JFrame implements ActionListener{
                     "Confirm Deletion", JOptionPane.YES_NO_OPTION);
             if (returnVal == JOptionPane.YES_OPTION) {
                 controller.removePersonFromList(p);
-                refreshPersonComboBox();
+                refreshPersonComboBox(null);
             }
         }
     }
     
-    private void refreshPersonComboBox() { // Gets the latest list of People objects and puts it into the combo box
+    private void refreshPersonComboBox(Person focus) { // Gets the latest list of People objects and puts it into the combo box
         personDropdown.removeAllItems();
         ArrayList<Person> pl = controller.getPersonList();
         pl.sort(Comparator.comparing(Person::getLastName));
         for (Person p : pl)
             personDropdown.addItem(p);
+        if (focus != null)
+            personDropdown.setSelectedItem(focus);
+        else
+            personDropdown.setSelectedIndex(-1);
     }
     
     private void personDropdownAction() { // When the personDropdown index changes, this runs to make all the fields match the user's current selection
@@ -529,6 +534,7 @@ public class GUI extends JFrame implements ActionListener{
         if (forNewPerson) {
             personDropdown.setSelectedIndex(-1);
             selectedPersonLabel.setText("NEW PERSON");
+            dayDropdown.setSelectedIndex(0);
         }
         else {
             controller.startEditingPerson((Person)personDropdown.getSelectedItem());
@@ -595,7 +601,7 @@ public class GUI extends JFrame implements ActionListener{
     private void loadFile() { // Calls the controller to load a file
         int result = controller.loadPeopleFile();
         if (result == 0) {
-            refreshPersonComboBox(); // Loads the new Person list into the dropdown 
+            refreshPersonComboBox(null); // Loads the new Person list into the dropdown 
             personDropdown.setSelectedIndex(-1);
         }
         else if (result == -1) 
@@ -605,7 +611,7 @@ public class GUI extends JFrame implements ActionListener{
     private void startNewFile() { // Calls the controller to start a new file
         int result = controller.startNewFile();
         if (result == 0) {
-            refreshPersonComboBox();
+            refreshPersonComboBox(null);
             personDropdown.setSelectedIndex(-1);
         }
     }
@@ -648,7 +654,7 @@ public class GUI extends JFrame implements ActionListener{
                 + "holding a list of Person objects to demonstrate the class hierarchy's<br>"
                 + "functionality.</p><h3>Credits</h3><ul>"
                 + "<li><b>Jamie Whitmarsh</b> - GUI design and implementation</li>"
-                + "<li><b>Veronica Edwards</b> - Person and OCCCDate hierarchy implementation</li>"
+                + "<li><b>Veronica Edwards</b> - Person hierarchy implementation</li>"
                 + "<li><b>Makayla Wood</b> - Program logic and operations</li>"
                 + "</ul></body></html>";
         JOptionPane.showMessageDialog(this, aboutText, "About", JOptionPane.PLAIN_MESSAGE);
